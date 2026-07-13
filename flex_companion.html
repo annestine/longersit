@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Long Sit Club</title>
+<style>
+  :root{
+    --bg:#EDF1F6;
+    --card:#FFFFFF;
+    --ink:#2A3441;
+    --muted:#6B7887;
+    --primary:#56789E;
+    --primary-deep:#3E5C7E;
+    --primary-soft:#DCE6F0;
+    --rose:#C4849C;
+    --rose-soft:#F3E4EA;
+    --teal:#6E9B8E;
+    --teal-soft:#E2EEEA;
+    --line:#DBE2EC;
+    --shadow:0 1px 3px rgba(42,52,65,.07),0 6px 20px rgba(42,52,65,.05);
+    --radius:18px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg);color:var(--ink);
+    font-size:16px;line-height:1.45;
+    padding-bottom:40px;
+  }
+  .wrap{max-width:480px;margin:0 auto;padding:0 16px}
+
+  header{padding:26px 4px 14px}
+  .brand{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--primary-deep);font-weight:700}
+  h1{font-size:26px;font-weight:800;letter-spacing:-.02em;margin-top:2px}
+  .datebar{color:var(--muted);font-size:14px;margin-top:2px}
+
+  .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-bottom:16px}
+  .card h2{font-size:15px;font-weight:700;letter-spacing:.02em;display:flex;align-items:center;justify-content:space-between}
+  .sub{color:var(--muted);font-size:13px;margin-top:2px}
+
+  .weekdots{display:flex;gap:8px;margin:14px 0 6px;justify-content:space-between}
+  .wd{flex:1;text-align:center}
+  .wd .dot{width:34px;height:34px;border-radius:50%;background:var(--bg);border:2px solid var(--line);
+    display:flex;align-items:center;justify-content:center;margin:0 auto;font-size:15px;color:var(--muted);transition:all .25s}
+  .wd.done .dot{background:var(--primary);border-color:var(--primary);color:#fff}
+  .wd.bonus .dot{background:var(--rose);border-color:var(--rose);color:#fff}
+  .wd .lbl{font-size:11px;color:var(--muted);margin-top:4px}
+  .wd.today .lbl{color:var(--primary-deep);font-weight:700}
+  .weekmeta{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:14px}
+  .weekcount{font-weight:700;color:var(--primary-deep)}
+  .goalhit{color:var(--teal);font-weight:700}
+
+  .histrow{display:flex;gap:10px;align-items:flex-end;margin-top:12px;overflow-x:auto;padding-bottom:4px}
+  .histweek{text-align:center;min-width:36px}
+  .histweek .ic{font-size:17px}
+  .histweek .wl{font-size:10px;color:var(--muted);margin-top:2px;white-space:nowrap}
+  .histweek.miss .ic{color:var(--line);font-size:15px}
+  .totweeks{margin-top:10px;font-size:14px;color:var(--muted)}
+  .totweeks b{color:var(--ink)}
+
+  .habit{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);cursor:pointer}
+  .habit:last-of-type{border-bottom:none}
+  .hcheck{width:26px;height:26px;min-width:26px;border-radius:9px;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:15px;color:#fff;margin-top:1px;transition:all .2s}
+  .habit.done .hcheck{background:var(--teal);border-color:var(--teal)}
+  .habit.done .ht{text-decoration:line-through;color:var(--muted)}
+  .ht{font-weight:600;font-size:15px}
+  .hcat{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--rose);font-weight:700}
+  .hd{font-size:13px;color:var(--muted);margin-top:2px}
+  .reshuffle{background:none;border:none;color:var(--primary);font-size:13px;font-weight:700;cursor:pointer;padding:4px}
+
+  .rbtn{width:100%;text-align:left;background:var(--bg);border:2px solid transparent;border-radius:14px;padding:14px;margin-top:10px;cursor:pointer;font-family:inherit;transition:all .15s}
+  .rbtn:active{transform:scale(.985)}
+  .rbtn .rn{font-weight:700;font-size:15px;color:var(--ink)}
+  .rbtn .rd{font-size:13px;color:var(--muted);margin-top:2px}
+  .rbtn .rt{font-size:12px;color:var(--primary-deep);font-weight:700;margin-top:4px}
+  .loggedtag{background:var(--teal-soft);color:var(--teal);border-radius:10px;padding:10px 14px;font-size:14px;font-weight:600;margin-top:12px;display:flex;justify-content:space-between;align-items:center}
+  .loggedtag button{background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;text-decoration:underline}
+  .manualLog{background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;text-decoration:underline;margin-top:10px;display:block}
+
+  .sessHead{display:flex;align-items:center;gap:10px;padding:22px 4px 12px}
+  .back{background:var(--card);border:none;width:38px;height:38px;border-radius:12px;font-size:17px;cursor:pointer;box-shadow:var(--shadow);color:var(--ink)}
+  .sessHead h1{font-size:20px}
+  .modetog{display:flex;background:var(--card);border-radius:12px;padding:4px;box-shadow:var(--shadow);margin-bottom:14px}
+  .modetog button{flex:1;border:none;background:none;padding:9px;border-radius:9px;font-weight:700;font-size:14px;color:var(--muted);cursor:pointer;font-family:inherit}
+  .modetog button.on{background:var(--primary);color:#fff}
+
+  .step{padding:13px 0;border-bottom:1px solid var(--line)}
+  .step:last-child{border-bottom:none}
+  .steprow{display:flex;align-items:center;gap:12px}
+  .scheck{width:26px;height:26px;min-width:26px;border-radius:9px;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;cursor:pointer;transition:all .2s}
+  .step.done .scheck{background:var(--primary);border-color:var(--primary)}
+  .step.done .sn{color:var(--muted);text-decoration:line-through}
+  .sn{font-weight:600;font-size:15px;flex:1}
+  .sside{font-size:12px;color:var(--rose);font-weight:700}
+  .sdur{font-size:13px;color:var(--muted);white-space:nowrap}
+  .qbtn{background:var(--primary-soft);color:var(--primary-deep);border:none;border-radius:9px;padding:6px 12px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;white-space:nowrap}
+  .qbtn.running{background:var(--primary);color:#fff}
+  .infoT{background:none;color:var(--muted);width:24px;height:24px;border-radius:50%;border:1.5px solid var(--line);font-size:12px;cursor:pointer;font-weight:700}
+  .sdesc{font-size:13px;color:var(--muted);margin-top:8px;padding:10px 12px;background:var(--bg);border-radius:10px;display:none}
+  .step.open .sdesc{display:block}
+
+  .bigbtn{width:100%;border:none;border-radius:14px;padding:16px;font-size:16px;font-weight:800;cursor:pointer;font-family:inherit;margin-top:6px;transition:transform .1s}
+  .bigbtn:active{transform:scale(.985)}
+  .bigbtn.primary{background:var(--primary);color:#fff}
+  .bigbtn.teal{background:var(--teal);color:#fff}
+  .bigbtn.ghost{background:var(--card);color:var(--muted);box-shadow:var(--shadow)}
+
+  .guided{position:fixed;inset:0;background:var(--bg);z-index:50;display:flex;flex-direction:column;padding:20px 16px 26px;max-width:480px;margin:0 auto}
+  .gtop{display:flex;justify-content:space-between;align-items:center}
+  .gprog{font-size:13px;color:var(--muted);font-weight:600}
+  .gexit{background:var(--card);border:none;border-radius:10px;padding:8px 14px;font-weight:700;color:var(--muted);cursor:pointer;box-shadow:var(--shadow)}
+  .gcenter{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+  .gname{font-size:23px;font-weight:800;letter-spacing:-.01em;padding:0 10px}
+  .gside{font-size:15px;color:var(--rose);font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin-top:4px}
+  .gwrapring{position:relative;width:230px;height:230px;margin:26px 0}
+  .gwrapring svg{transform:rotate(-90deg)}
+  .gtime{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .gtime .t{font-size:52px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+  .gtime .u{font-size:13px;color:var(--muted)}
+  .grepbox{margin:26px 0;background:var(--card);border-radius:18px;padding:22px 26px;box-shadow:var(--shadow)}
+  .grepbox .r{font-size:26px;font-weight:800;color:var(--primary-deep)}
+  .gnext{font-size:14px;color:var(--muted)}
+  .gnext b{color:var(--ink)}
+  .gdesc{font-size:13px;color:var(--muted);margin-top:12px;padding:0 8px;max-height:110px;overflow-y:auto}
+  .gbtns{display:flex;gap:10px}
+  .gbtns .bigbtn{margin-top:0}
+  .flash{animation:flashbg .6s ease 2}
+  @keyframes flashbg{0%,100%{background:var(--bg)}50%{background:var(--rose-soft)}}
+  .resting .gname{color:var(--teal)}
+
+  .celebrate{text-align:center;padding:40px 10px}
+  .celebrate .big{font-size:54px}
+  .celebrate h2{font-size:22px;margin-top:8px}
+  .celebrate p{color:var(--muted);margin-top:6px;font-size:14px}
+
+  .hidden{display:none!important}
+  @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+  button:focus-visible{outline:3px solid var(--primary);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+
+<script>
+/* ============ DATA ============ */
+
+const HABITS = {
+  Standing:[
+    {id:'calf',t:'Calf raises',d:'Rise onto your toes and lower slowly — while the kettle boils, brushing teeth, in a queue. 10–15 slow reps.'},
+    {id:'oneleg',t:'Single-leg stand',d:'Shift your weight onto one leg for 20–30 seconds while doing something else. Right side especially.'},
+    {id:'hipcirc',t:'Standing hip circles',d:'Hands on hips, slow circles like a hula hoop. 5 each direction.'},
+  ],
+  Sitting:[
+    {id:'rock',t:'Pelvic rocking',d:'Tip your pelvis forward and back a few times while seated. Keeps the movement pattern fresh.'},
+    {id:'sitbones',t:'Sit-bones check',d:'Are you on your sit bones, or rolled back onto your tailbone? Notice and gently correct.'},
+    {id:'feet',t:'Feet flat check',d:'Uncross your legs, both feet flat on the floor. Reduces uneven load on the right side.'},
+    {id:'shoulders',t:'Shoulder rolls',d:'5 slow backward rolls. Counters the forward rounding from crochet and desk work.'},
+    {id:'chin',t:'Chin tucks',d:'Draw your chin straight back (brief double chin), hold a moment, release. 5 reps.'},
+  ],
+  Anywhere:[
+    {id:'glutes',t:'Glute squeezes',d:'Squeeze firmly for 5–10 seconds, release. Repeat a few times. Sitting, standing, anywhere.'},
+    {id:'door',t:'Doorframe hip-flexor step',d:'Take one slightly longer step through a doorway and feel a brief stretch at the front of the hip.'},
+    {id:'walk',t:'45-minute movement break',d:'Stand up and walk for 2 minutes — to the kitchen and back counts. The single highest-value habit.'},
+  ]
+};
+
+const DESC = {
+  catcow:'On all fours, hands under shoulders, knees under hips. Inhale: belly drops, lower back arches gently, gaze forward. Exhale: round the whole spine up, tuck the tailbone, let the head drop. Flow with the breath — no pausing at either end. Neck stays in line with the spine.',
+  birddog:'On all fours. Extend your right arm forward and left leg back at the same time, spine completely still and neutral. Hold 5–10 seconds, lower, switch sides. If the lower back is very irritable today, skip this one and tick it off anyway.',
+  ham:'Lie on your back, strap around the ball of the foot, foot flexed (toes pulled toward your face). Raise the leg until you feel the back of the thigh — knee as straight as comfortable. The other leg presses flat into the floor. Hold completely still; ease a little deeper only on exhales. Head and shoulders stay down.',
+  fold:'Sit on a folded blanket or firm cushion so the pelvis can tip forward. Legs out in front, knees bent only as much as needed. Sit tall first, then hinge from the hips — not the waist or shoulders. Hands rest wherever they land, no pulling. Straight legs matter more than how far you fold.',
+  hipflex:'Lie across the bed with one leg hanging off the edge from mid-thigh down. Pull the other knee firmly to your chest with both hands. Let the hanging leg go completely heavy — gravity does the work, no effort. Travelling without a bed: kneeling lunge with the tailbone gently tucked.',
+  fig4:'Lie on your back with both feet on the wall, knees around 90°. Cross one ankle over the other knee, foot flexed to protect the knee. Shuffle closer to the wall to deepen, away to ease. No pulling with the arms — the wall does the work.',
+  calfA:'Face a wall, one foot stepped back, heel flat, back knee straight. Front leg also straight. Lean in until the upper calf of the back leg stretches. On the right side: comfortable range only, never force the ankle.',
+  calfB:'Same position, but bend the back knee slightly, heel still flat on the floor. The stretch moves lower and deeper, toward the Achilles.',
+  sidebend:'Sit cross-legged (or stand). Reach one arm overhead and lean directly sideways away from that arm, keeping both sit bones grounded. You should feel a long stretch from the top of the hip up along the lower ribs — the QL area, right where the mid-back ache lives.',
+  openbook:'Lie on your side, knees bent to 90°, both arms stacked straight out in front. Sweep the top arm up and across to the other side like opening a book, following it with your eyes. Let the chest rotate open. Slow — one breath per rep.',
+  tilts:'Lie on your back, knees bent, feet flat. Gently flatten your lower back into the floor, hold 5 seconds, release. Wakes the deep spinal stabilisers without loading anything that is irritated.'
+};
+
+const T =(name,side,secs,desc,group)=>({kind:'timed',name,side,secs,desc,group});
+const R =(name,label,desc)=>({kind:'reps',name,label,desc,group:name});
+
+const WARMUP = [
+  R('Cat-Cow','10–15 fluid reps',DESC.catcow),
+  R('Bird-Dog','8–10 each side',DESC.birddog),
+];
+const CORE = [
+  T('Hamstring stretch, strap','Right · round 1',90,DESC.ham,'ham'),
+  T('Hamstring stretch, strap','Left · round 1',90,DESC.ham,'ham'),
+  T('Hamstring stretch, strap','Right · round 2',90,DESC.ham,'ham'),
+  T('Hamstring stretch, strap','Left · round 2',90,DESC.ham,'ham'),
+  T('Seated forward fold',null,120,DESC.fold,'fold'),
+];
+const HIPFLEX =(s)=>[
+  T('Supine hip flexor (bed edge)','Right',s,DESC.hipflex,'hf'),
+  T('Supine hip flexor (bed edge)','Left',s,DESC.hipflex,'hf'),
+];
+const FIG4 = [
+  T('Figure-four at wall','Right',120,DESC.fig4,'f4'),
+  T('Figure-four at wall','Left',90,DESC.fig4,'f4'),
+  T('Figure-four at wall','Right again',60,DESC.fig4,'f4'),
+];
+const SIDEBEND = [
+  T('Seated side bend (QL)','Lean left — stretch right',60,DESC.sidebend,'sb'),
+  T('Seated side bend (QL)','Lean right — stretch left',60,DESC.sidebend,'sb'),
+];
+const OPENBOOK = [ R('Open-book rotations','8–10 each side',DESC.openbook) ];
+const TILTS = [ R('Pelvic tilts','10–15 slow reps',DESC.tilts) ];
+const CALVES = [
+  T('Calf stretch — straight knee','Right',60,DESC.calfA,'cA'),
+  T('Calf stretch — straight knee','Left',60,DESC.calfA,'cA'),
+  T('Calf stretch — bent knee','Right',60,DESC.calfB,'cB'),
+  T('Calf stretch — bent knee','Left',60,DESC.calfB,'cB'),
+];
+
+const ROUTINES = [
+  {id:'r1',name:'Glute / lower back flare',desc:'Hip flexor, figure-four and pelvic tilts weighted toward the right side.',
+   steps:[...WARMUP,...CORE,...HIPFLEX(75),...FIG4,...TILTS]},
+  {id:'r2',name:'Mid-back flare',desc:'QL side bends and open-book rotations for the spot below the bra strap.',
+   steps:[...WARMUP,...CORE,...SIDEBEND,...OPENBOOK]},
+  {id:'r3',name:'Both areas',desc:'The fuller flare routine — hips, glutes and mid-back.',
+   steps:[...WARMUP,...CORE,...HIPFLEX(60),...FIG4,...SIDEBEND,...TILTS]},
+  {id:'r4',name:'Normal routine',desc:'No issues today — full maintenance including calves.',
+   steps:[...WARMUP,...CORE,...HIPFLEX(75),...CALVES,...FIG4,...TILTS]},
+];
+
+function estMinutes(steps){
+  let s=0, reps=0;
+  steps.forEach(st=>{ if(st.kind==='timed') s+=st.secs; else reps++; });
+  s += reps*75;
+  s += steps.length*9;
+  return Math.round(s/60);
+}
+
+/* ============ STATE & STORAGE ============ */
+
+let state = null;
+const KEY='longsit_state_v1';
+
+async function loadState(){
+  try{
+    const r = await window.storage.get(KEY);
+    if(r && r.value){ state = JSON.parse(r.value); }
+  }catch(e){ /* first run or storage unavailable */ }
+  if(!state) state = {habitsDate:null,habitsPicked:[],habitsDone:[],weekStart:null,sessions:[],history:[]};
+  rollover();
+  await saveState();
+}
+async function saveState(){
+  try{ await window.storage.set(KEY, JSON.stringify(state)); }
+  catch(e){ /* keep going in memory */ }
+}
+
+function todayStr(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function mondayOf(dateStr){
+  const d = new Date(dateStr+'T12:00:00');
+  const day = (d.getDay()+6)%7;
+  d.setDate(d.getDate()-day);
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+
+function rollover(){
+  const today = todayStr();
+  const curMon = mondayOf(today);
+  if(state.weekStart && state.weekStart!==curMon){
+    state.history.push({weekStart:state.weekStart,count:state.sessions.length});
+    if(state.history.length>26) state.history = state.history.slice(-26);
+    state.sessions=[];
+  }
+  state.weekStart = curMon;
+  if(state.habitsDate!==today){
+    state.habitsDate=today;
+    state.habitsPicked = pickHabits();
+    state.habitsDone=[false,false,false];
+  }
+}
+
+function pickHabits(){
+  const cats=['Standing','Sitting','Anywhere'];
+  return cats.map(c=>{
+    const pool=HABITS[c];
+    const h=pool[Math.floor(Math.random()*pool.length)];
+    return {cat:c,id:h.id};
+  });
+}
+function habitById(cat,id){ return HABITS[cat].find(h=>h.id===id) || HABITS[cat][0]; }
+
+/* ============ VIEWS ============ */
+
+const app=document.getElementById('app');
+let view={name:'home'};
+let guided=null;
+let manualTimer=null;
+
+function render(){
+  if(view.name==='home') renderHome();
+  else if(view.name==='session') renderSession();
+  else if(view.name==='done') renderDone();
+}
+
+function renderHome(){
+  const today=todayStr();
+  const n=state.sessions.length;
+  const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const mon=new Date(state.weekStart+'T12:00:00');
+
+  let dots='';
+  for(let i=0;i<7;i++){
+    const d=new Date(mon); d.setDate(mon.getDate()+i);
+    const ds=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    const done=state.sessions.includes(ds);
+    const bonus=done && state.sessions.indexOf(ds)>=5;
+    dots+=`<div class="wd ${done?(bonus?'bonus':'done'):''} ${ds===today?'today':''}">
+      <div class="dot">${done?(bonus?'★':'✓'):''}</div><div class="lbl">${days[i]}</div></div>`;
+  }
+
+  const completedWeeks = state.history.filter(w=>w.count>=5).length;
+  let hist='';
+  state.history.slice(-8).forEach(w=>{
+    const d=new Date(w.weekStart+'T12:00:00');
+    const wl=(d.getDate())+'/'+(d.getMonth()+1);
+    let ic, cls='';
+    if(w.count>=7) ic='★★';
+    else if(w.count===6) ic='★';
+    else if(w.count===5) ic='✓';
+    else {ic='·'; cls='miss';}
+    hist+=`<div class="histweek ${cls}"><div class="ic">${ic}</div><div class="wl">${wl}</div></div>`;
+  });
+
+  const habitsHtml = state.habitsPicked.map((p,i)=>{
+    const h=habitById(p.cat,p.id);
+    return `<div class="habit ${state.habitsDone[i]?'done':''}" onclick="toggleHabit(${i})">
+      <div class="hcheck">${state.habitsDone[i]?'✓':''}</div>
+      <div><div class="hcat">${p.cat}</div><div class="ht">${h.t}</div><div class="hd">${h.d}</div></div>
+    </div>`;
+  }).join('');
+
+  const loggedToday = state.sessions.includes(today);
+  const routinesHtml = ROUTINES.map(r=>`
+    <button class="rbtn" onclick="startRoutine('${r.id}')">
+      <div class="rn">${r.name}</div>
+      <div class="rd">${r.desc}</div>
+      <div class="rt">~${estMinutes(r.steps)} min · ${r.steps.length} steps</div>
+    </button>`).join('');
+
+  const dt=new Date();
+  const dateline=dt.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
+
+  app.innerHTML=`
+  <header>
+    <div class="brand">Long Sit Club</div>
+    <h1>Hi Stina</h1>
+    <div class="datebar">${dateline}</div>
+  </header>
+
+  <div class="card">
+    <h2>This week ${n>=5?'<span class="goalhit">goal met ✓</span>':`<span class="weekcount">${n} / 5</span>`}</h2>
+    <div class="weekdots">${dots}</div>
+    <div class="weekmeta">
+      <span class="sub">${n>5?'Bonus days shine in rose ★':'5 sessions is the goal — extras earn stars'}</span>
+    </div>
+    ${state.history.length?`<div class="histrow">${hist}</div>
+    <div class="totweeks"><b>${completedWeeks}</b> completed week${completedWeeks===1?'':'s'} of 5+</div>`:''}
+  </div>
+
+  <div class="card">
+    <h2>Today's micro-habits <button class="reshuffle" onclick="reshuffle()">↻ reshuffle</button></h2>
+    <div class="sub">One standing, one sitting, one anywhere. Every day.</div>
+    ${habitsHtml}
+  </div>
+
+  <div class="card">
+    <h2>Stretch session</h2>
+    <div class="sub">Pick the routine that matches today's body.</div>
+    ${routinesHtml}
+    ${loggedToday
+      ?`<div class="loggedtag">Session logged today ✓ <button onclick="unlogToday()">undo</button></div>`
+      :`<button class="manualLog" onclick="logSession()">Did the routine without the app? Log it manually</button>`}
+  </div>`;
+}
+
+function renderSession(){
+  const r=view.routine;
+  if(view.mode==='guided' && guided){ renderGuided(); return; }
+
+  const steps=r.steps.map((s,i)=>{
+    const checked=view.checked[i];
+    const running = manualTimer && manualTimer.idx===i;
+    let action='';
+    if(s.kind==='timed'){
+      action = `<button class="qbtn ${running?'running':''}" onclick="event.stopPropagation();manualStart(${i})">${running?fmt(manualTimer.remaining):'▶ '+fmt(s.secs)}</button>`;
+    } else {
+      action = `<span class="sdur">${s.label}</span>`;
+    }
+    return `<div class="step ${checked?'done':''} ${view.open===i?'open':''}" id="step${i}">
+      <div class="steprow">
+        <div class="scheck" onclick="toggleStep(${i})">${checked?'✓':''}</div>
+        <div style="flex:1" onclick="toggleStep(${i})">
+          <div class="sn">${s.name}</div>
+          ${s.side?`<div class="sside">${s.side}</div>`:''}
+        </div>
+        ${action}
+        <button class="infoT" onclick="event.stopPropagation();toggleInfo(${i})">i</button>
+      </div>
+      <div class="sdesc">${s.desc}</div>
+    </div>`;
+  }).join('');
+
+  const allDone = view.checked.every(c=>c);
+
+  app.innerHTML=`
+  <div class="sessHead">
+    <button class="back" onclick="exitSession()">←</button>
+    <div><h1>${r.name}</h1><div class="sub">~${estMinutes(r.steps)} min</div></div>
+  </div>
+  <div class="modetog">
+    <button class="${view.mode==='manual'?'on':''}" onclick="setMode('manual')">Manual</button>
+    <button class="${view.mode==='guided'?'on':''}" onclick="setMode('guided')">Guided</button>
+  </div>
+  <div class="card">${steps}</div>
+  <button class="bigbtn ${allDone?'teal':'primary'}" onclick="finishSession()">${allDone?'Finish & log session ✓':'Log session'}</button>
+  <button class="bigbtn ghost" onclick="exitSession()">Exit without logging</button>`;
+}
+
+/* ---- guided mode ---- */
+
+function buildTimeline(steps){
+  const tl=[];
+  steps.forEach((s,i)=>{
+    tl.push({...s,stepIndex:i});
+    if(i<steps.length-1){
+      const next=steps[i+1];
+      const sameGroup = s.group && next.group===s.group;
+      tl.push({kind:'rest',secs:sameGroup?5:10,label:sameGroup?'Switch sides':'Next exercise',next});
+    }
+  });
+  return tl;
+}
+
+function startGuided(){
+  const tl=buildTimeline(view.routine.steps);
+  guided={tl,idx:0,remaining:null,paused:false,interval:null};
+  if(navigator.wakeLock) navigator.wakeLock.request('screen').catch(()=>{});
+  enterGuidedItem();
+}
+
+function enterGuidedItem(){
+  if(guided.interval) clearInterval(guided.interval);
+  const item=guided.tl[guided.idx];
+  if(!item){ guidedComplete(); return; }
+  if(item.kind==='reps'){ guided.remaining=null; renderGuided(); return; }
+  guided.remaining=item.secs;
+  renderGuided();
+  guided.interval=setInterval(()=>{
+    if(guided.paused) return;
+    guided.remaining--;
+    if(guided.remaining<=0){
+      clearInterval(guided.interval);
+      document.body.classList.add('flash');
+      setTimeout(()=>document.body.classList.remove('flash'),1300);
+      if(item.stepIndex!==undefined) view.checked[item.stepIndex]=true;
+      guided.idx++; enterGuidedItem();
+    } else {
+      updateGuidedTime();
+    }
+  },1000);
+}
+
+function guidedNext(){
+  const item=guided.tl[guided.idx];
+  if(guided.interval) clearInterval(guided.interval);
+  if(item && item.stepIndex!==undefined) view.checked[item.stepIndex]=true;
+  guided.idx++; enterGuidedItem();
+}
+function guidedComplete(){
+  if(guided && guided.interval) clearInterval(guided.interval);
+  guided=null;
+  view.routine.steps.forEach((_,i)=>view.checked[i]=true);
+  finishSession();
+}
+function exitGuided(){
+  if(guided && guided.interval) clearInterval(guided.interval);
+  guided=null;
+  view.mode='manual'; render();
+}
+
+function fmt(s){ const m=Math.floor(s/60),ss=s%60; return m>0? m+':'+String(ss).padStart(2,'0') : ss+'s'; }
+
+function renderGuided(){
+  const item=guided.tl[guided.idx];
+  if(!item) return;
+  const stepsOnly=guided.tl.filter(t=>t.kind!=='rest');
+  const stepNum=guided.tl.slice(0,guided.idx+1).filter(t=>t.kind!=='rest').length;
+  const isRest=item.kind==='rest';
+  const nextItem = isRest? item.next : guided.tl.slice(guided.idx+1).find(t=>t.kind!=='rest');
+
+  let centre='';
+  if(item.kind==='reps'){
+    centre=`<div class="gname">${item.name}</div>
+      <div class="grepbox"><div class="r">${item.label}</div></div>
+      <div class="gdesc">${item.desc}</div>`;
+  } else {
+    const secs=item.secs, rem=guided.remaining!==null?guided.remaining:secs;
+    const pct=1-rem/secs;
+    const C=2*Math.PI*104;
+    centre=`<div class="gname">${isRest?item.label:item.name}</div>
+      ${item.side?`<div class="gside">${item.side}</div>`:''}
+      <div class="gwrapring">
+        <svg width="230" height="230" viewBox="0 0 230 230">
+          <circle cx="115" cy="115" r="104" fill="none" stroke="var(--line)" stroke-width="10"/>
+          <circle id="ring" cx="115" cy="115" r="104" fill="none" stroke="${isRest?'var(--teal)':'var(--primary)'}" stroke-width="10"
+            stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C*(1-pct)}"/>
+        </svg>
+        <div class="gtime"><div class="t" id="gtimeT">${fmt(rem)}</div><div class="u" id="gtimeU">${guided.paused?'paused':''}</div></div>
+      </div>
+      ${!isRest?`<div class="gdesc">${item.desc}</div>`:''}`;
+  }
+
+  app.innerHTML=`
+  <div class="guided ${isRest?'resting':''}">
+    <div class="gtop">
+      <div class="gprog">${isRest?'':`Step ${stepNum} of ${stepsOnly.length}`}</div>
+      <button class="gexit" onclick="exitGuided()">Exit guided</button>
+    </div>
+    <div class="gcenter">
+      ${centre}
+      ${nextItem?`<div class="gnext" style="margin-top:14px">Next: <b>${nextItem.name}${nextItem.side?' · '+nextItem.side:''}</b></div>`:''}
+    </div>
+    <div class="gbtns">
+      ${item.kind!=='reps'?`<button class="bigbtn ghost" style="flex:1" onclick="guidedPause()">${guided.paused?'Resume':'Pause'}</button>`:''}
+      <button class="bigbtn primary" style="flex:1" onclick="guidedNext()">${item.kind==='reps'?'Done →':'Skip →'}</button>
+    </div>
+  </div>`;
+}
+function updateGuidedTime(){
+  const t=document.getElementById('gtimeT');
+  const ring=document.getElementById('ring');
+  const item=guided.tl[guided.idx];
+  if(t) t.textContent=fmt(guided.remaining);
+  if(ring && item.secs){
+    const C=2*Math.PI*104;
+    const pct=1-guided.remaining/item.secs;
+    ring.style.strokeDashoffset=C*(1-pct);
+  }
+}
+function guidedPause(){ guided.paused=!guided.paused; renderGuided(); }
+
+/* ---- completion ---- */
+function renderDone(){
+  const n=state.sessions.length;
+  const msg = n>5 ? 'Bonus session — that\u2019s a star ★' :
+              n===5 ? 'That was your 5th — week complete!' :
+              `${n} of 5 this week.`;
+  app.innerHTML=`
+  <div class="card celebrate" style="margin-top:60px">
+    <div class="big">${n>=5?'★':'✓'}</div>
+    <h2>Session logged</h2>
+    <p>${msg}</p>
+    <button class="bigbtn primary" onclick="goHome()">Back to today</button>
+  </div>`;
+}
+
+/* ============ ACTIONS ============ */
+
+window.toggleHabit=async i=>{ state.habitsDone[i]=!state.habitsDone[i]; await saveState(); render(); };
+window.reshuffle=async ()=>{ state.habitsPicked=pickHabits(); state.habitsDone=[false,false,false]; await saveState(); render(); };
+
+window.startRoutine=id=>{
+  const r=ROUTINES.find(x=>x.id===id);
+  view={name:'session',routine:r,mode:'manual',checked:r.steps.map(()=>false),open:null};
+  render();
+};
+window.setMode=m=>{
+  stopManualTimer();
+  view.mode=m;
+  if(m==='guided') startGuided();
+  else { if(guided && guided.interval) clearInterval(guided.interval); guided=null; render(); }
+};
+window.toggleStep=i=>{ view.checked[i]=!view.checked[i]; render(); };
+window.toggleInfo=i=>{ view.open = (view.open===i? null : i); render(); };
+
+function stopManualTimer(){ if(manualTimer){clearInterval(manualTimer.interval); manualTimer=null;} }
+window.manualStart=i=>{
+  if(manualTimer && manualTimer.idx===i){ stopManualTimer(); render(); return; }
+  stopManualTimer();
+  const s=view.routine.steps[i];
+  manualTimer={idx:i,remaining:s.secs};
+  manualTimer.interval=setInterval(()=>{
+    if(!manualTimer) return;
+    manualTimer.remaining--;
+    if(manualTimer.remaining<=0){
+      stopManualTimer();
+      view.checked[i]=true;
+      document.body.classList.add('flash');
+      setTimeout(()=>document.body.classList.remove('flash'),1300);
+    }
+    render();
+  },1000);
+  render();
+};
+
+window.finishSession=async ()=>{
+  stopManualTimer();
+  await logSessionInternal();
+  view={name:'done'};
+  render();
+};
+window.exitSession=()=>{ stopManualTimer(); if(guided && guided.interval) clearInterval(guided.interval); guided=null; view={name:'home'}; render(); };
+window.goHome=()=>{ view={name:'home'}; render(); };
+
+async function logSessionInternal(){
+  const t=todayStr();
+  if(!state.sessions.includes(t)) state.sessions.push(t);
+  await saveState();
+}
+window.logSession=async ()=>{ await logSessionInternal(); render(); };
+window.unlogToday=async ()=>{
+  state.sessions=state.sessions.filter(d=>d!==todayStr());
+  await saveState(); render();
+};
+
+/* ============ INIT ============ */
+loadState().then(render);
+</script>
+</body>
+</html>
