@@ -6,78 +6,60 @@
 <title>Long Sit Club</title>
 <style>
   :root{
-    --bg:#EDF1F6;
-    --card:#FFFFFF;
-    --ink:#2A3441;
-    --muted:#6B7887;
-    --primary:#56789E;
-    --primary-deep:#3E5C7E;
-    --primary-soft:#DCE6F0;
-    --rose:#C4849C;
-    --rose-soft:#F3E4EA;
-    --teal:#6E9B8E;
-    --teal-soft:#E2EEEA;
+    --bg:#EDF1F6; --card:#FFFFFF; --ink:#2A3441; --muted:#6B7887;
+    --primary:#56789E; --primary-deep:#3E5C7E; --primary-soft:#DCE6F0;
+    --rose:#C4849C; --rose-soft:#F3E4EA; --teal:#6E9B8E; --teal-soft:#E2EEEA;
+    --gold:#C9A96A;
     --line:#DBE2EC;
     --shadow:0 1px 3px rgba(42,52,65,.07),0 6px 20px rgba(42,52,65,.05);
     --radius:18px;
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   html,body{height:100%}
-  body{
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    background:var(--bg);color:var(--ink);
-    font-size:16px;line-height:1.45;
-    padding-bottom:40px;
-  }
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg);color:var(--ink);font-size:16px;line-height:1.45;padding-bottom:40px}
   .wrap{max-width:480px;margin:0 auto;padding:0 16px}
 
-  header{padding:26px 4px 14px}
+  header{padding:26px 4px 10px}
   .brand{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--primary-deep);font-weight:700}
   h1{font-size:26px;font-weight:800;letter-spacing:-.02em;margin-top:2px}
   .datebar{color:var(--muted);font-size:14px;margin-top:2px}
 
   .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-bottom:16px}
-  .card h2{font-size:15px;font-weight:700;letter-spacing:.02em;display:flex;align-items:center;justify-content:space-between}
+  .card h2{font-size:15px;font-weight:700;letter-spacing:.02em;display:flex;align-items:center;justify-content:space-between;gap:8px}
   .sub{color:var(--muted);font-size:13px;margin-top:2px}
 
-  .weekdots{display:flex;gap:8px;margin:14px 0 6px;justify-content:space-between}
-  .wd{flex:1;text-align:center}
-  .wd .dot{width:34px;height:34px;border-radius:50%;background:var(--bg);border:2px solid var(--line);
-    display:flex;align-items:center;justify-content:center;margin:0 auto;font-size:15px;color:var(--muted);transition:all .25s}
-  .wd.done .dot{background:var(--primary);border-color:var(--primary);color:#fff}
-  .wd.bonus .dot{background:var(--rose);border-color:var(--rose);color:#fff}
-  .wd .lbl{font-size:11px;color:var(--muted);margin-top:4px}
-  .wd.today .lbl{color:var(--primary-deep);font-weight:700}
-  .weekmeta{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:14px}
-  .weekcount{font-weight:700;color:var(--primary-deep)}
-  .goalhit{color:var(--teal);font-weight:700}
+  /* tip */
+  .tipcard{background:linear-gradient(135deg,#F6F1E7,#F3E4EA);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px 18px;margin-bottom:16px}
+  .tiplabel{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-weight:800}
+  .tiptext{font-size:15px;font-weight:600;margin-top:4px;line-height:1.5}
 
-  .histrow{display:flex;gap:10px;align-items:flex-end;margin-top:12px;overflow-x:auto;padding-bottom:4px}
-  .histweek{text-align:center;min-width:36px}
-  .histweek .ic{font-size:17px}
-  .histweek .wl{font-size:10px;color:var(--muted);margin-top:2px;white-space:nowrap}
-  .histweek.miss .ic{color:var(--line);font-size:15px}
-  .totweeks{margin-top:10px;font-size:14px;color:var(--muted)}
-  .totweeks b{color:var(--ink)}
+  /* steps */
+  .step{padding:12px 0;border-bottom:1px solid var(--line)}
+  .step:last-child{border-bottom:none;padding-bottom:4px}
+  .steprow{display:flex;align-items:center;gap:12px}
+  .scheck{width:26px;height:26px;min-width:26px;border-radius:9px;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;cursor:pointer;transition:all .2s}
+  .step.done .scheck{background:var(--teal);border-color:var(--teal)}
+  .step.done .sn{color:var(--muted);text-decoration:line-through}
+  .sn{font-weight:600;font-size:15px;flex:1}
+  .sside{font-size:12px;color:var(--rose);font-weight:700}
+  .sdur{font-size:13px;color:var(--muted);white-space:nowrap}
+  .qbtn{background:var(--primary-soft);color:var(--primary-deep);border:none;border-radius:9px;padding:6px 12px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .qbtn.running{background:var(--primary);color:#fff}
+  .infoT{background:none;color:var(--muted);width:24px;height:24px;min-width:24px;border-radius:50%;border:1.5px solid var(--line);font-size:12px;cursor:pointer;font-weight:700}
+  .sdesc{font-size:13px;color:var(--muted);margin-top:8px;padding:10px 12px;background:var(--bg);border-radius:10px;display:none}
+  .step.open .sdesc{display:block}
+  .fixedtag{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+  .rotatetag{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--rose);font-weight:700}
+  .alldone{color:var(--teal);font-weight:700;font-size:13px}
 
-  .habit{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);cursor:pointer}
-  .habit:last-of-type{border-bottom:none}
-  .hcheck{width:26px;height:26px;min-width:26px;border-radius:9px;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:15px;color:#fff;margin-top:1px;transition:all .2s}
-  .habit.done .hcheck{background:var(--teal);border-color:var(--teal)}
-  .habit.done .ht{text-decoration:line-through;color:var(--muted)}
-  .ht{font-weight:600;font-size:15px}
-  .hcat{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--rose);font-weight:700}
-  .hd{font-size:13px;color:var(--muted);margin-top:2px}
-  .reshuffle{background:none;border:none;color:var(--primary);font-size:13px;font-weight:700;cursor:pointer;padding:4px}
-
+  /* routine picker */
   .rbtn{width:100%;text-align:left;background:var(--bg);border:2px solid transparent;border-radius:14px;padding:14px;margin-top:10px;cursor:pointer;font-family:inherit;transition:all .15s}
   .rbtn:active{transform:scale(.985)}
   .rbtn .rn{font-weight:700;font-size:15px;color:var(--ink)}
   .rbtn .rd{font-size:13px;color:var(--muted);margin-top:2px}
   .rbtn .rt{font-size:12px;color:var(--primary-deep);font-weight:700;margin-top:4px}
-  .loggedtag{background:var(--teal-soft);color:var(--teal);border-radius:10px;padding:10px 14px;font-size:14px;font-weight:600;margin-top:12px;display:flex;justify-content:space-between;align-items:center}
-  .loggedtag button{background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;text-decoration:underline}
-  .manualLog{background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;text-decoration:underline;margin-top:10px;display:block}
+  .rbtn.mini{border:2px dashed var(--line);background:var(--card)}
 
   .sessHead{display:flex;align-items:center;gap:10px;padding:22px 4px 12px}
   .back{background:var(--card);border:none;width:38px;height:38px;border-radius:12px;font-size:17px;cursor:pointer;box-shadow:var(--shadow);color:var(--ink)}
@@ -85,21 +67,6 @@
   .modetog{display:flex;background:var(--card);border-radius:12px;padding:4px;box-shadow:var(--shadow);margin-bottom:14px}
   .modetog button{flex:1;border:none;background:none;padding:9px;border-radius:9px;font-weight:700;font-size:14px;color:var(--muted);cursor:pointer;font-family:inherit}
   .modetog button.on{background:var(--primary);color:#fff}
-
-  .step{padding:13px 0;border-bottom:1px solid var(--line)}
-  .step:last-child{border-bottom:none}
-  .steprow{display:flex;align-items:center;gap:12px}
-  .scheck{width:26px;height:26px;min-width:26px;border-radius:9px;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;cursor:pointer;transition:all .2s}
-  .step.done .scheck{background:var(--primary);border-color:var(--primary)}
-  .step.done .sn{color:var(--muted);text-decoration:line-through}
-  .sn{font-weight:600;font-size:15px;flex:1}
-  .sside{font-size:12px;color:var(--rose);font-weight:700}
-  .sdur{font-size:13px;color:var(--muted);white-space:nowrap}
-  .qbtn{background:var(--primary-soft);color:var(--primary-deep);border:none;border-radius:9px;padding:6px 12px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;white-space:nowrap}
-  .qbtn.running{background:var(--primary);color:#fff}
-  .infoT{background:none;color:var(--muted);width:24px;height:24px;border-radius:50%;border:1.5px solid var(--line);font-size:12px;cursor:pointer;font-weight:700}
-  .sdesc{font-size:13px;color:var(--muted);margin-top:8px;padding:10px 12px;background:var(--bg);border-radius:10px;display:none}
-  .step.open .sdesc{display:block}
 
   .bigbtn{width:100%;border:none;border-radius:14px;padding:16px;font-size:16px;font-weight:800;cursor:pointer;font-family:inherit;margin-top:6px;transition:transform .1s}
   .bigbtn:active{transform:scale(.985)}
@@ -135,54 +102,104 @@
   .celebrate h2{font-size:22px;margin-top:8px}
   .celebrate p{color:var(--muted);margin-top:6px;font-size:14px}
 
-  .hidden{display:none!important}
+  .switchwrap{position:absolute;left:-9999px;top:-9999px}
   @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
   button:focus-visible{outline:3px solid var(--primary);outline-offset:2px}
 </style>
 </head>
 <body>
 <div class="wrap" id="app"></div>
+<!-- hidden switch for iOS haptic attempt -->
+<label class="switchwrap" id="hapticLabel"><input type="checkbox" switch id="hapticSwitch"></label>
 
 <script>
-/* ============ DATA ============ */
+/* ============ DAILY TIPS (no posture-policing) ============ */
+const TIPS = [
+  "Alternate which leg you cross today — every time you notice, swap. Same comfort, half the asymmetry.",
+  "Crafting or handwork today? Bring the work up to you, not your head down to the work. Elbows supported helps.",
+  "Carrying a bag today? Switch shoulders halfway, or use both straps. Uneven loads feed the right side.",
+  "Any position is fine — the same position for an hour isn't. Change something whenever you notice.",
+  "Symmetry snack: ten seconds evenly on both sit bones, then go back to comfy. A few times today.",
+  "Kettle boiling? That's a free calf-raise window.",
+  "Every time you refill water today, roll your shoulders backward three times.",
+  "Lean on the other armrest today. Whichever one you always use — the other one.",
+  "Sitting down for a long focused session? Stand and shake it out once mid-way — tie it to something natural, like finishing a section or a row.",
+  "Walk to the furthest toilet today. Small detours count.",
+  "Notice your jaw right now. Unclench it. Repeat whenever you think of it today.",
+  "Standing in a queue? Weight on one leg, 20 seconds, then the other.",
+  "Shoulders creeping toward your ears while you focus? Exhale and let them drop. Check three times today.",
+  "Doorways are free hip openers — one slightly longer step through, feel the front of the hip.",
+  "If you sit with legs up today (fine!), swap which leg is on top now and then.",
+  "Put something you need often — your water glass, your scissors — slightly out of reach today.",
+  "Right side feeling tight? Ten slow neck half-circles, chin down, ear to each shoulder. No full backward circles.",
+  "After a long sit, stand and reach both arms overhead for three breaths before walking off.",
+  "Heavy shopping? Split it between both hands instead of one strong side. The right side always volunteers — decline.",
+  "While the tea steeps: hands behind back, clasp, gently draw shoulders back for five breaths.",
+  "Right now: sit or stand tall, interlace your fingers, push palms up toward the ceiling and stretch as tall as you can for three slow breaths.",
+  "When you surface from a hyperfocus session, stretch before you start the next thing. Make surfacing the trigger.",
+  "Stairs today? Full foot on the step, push through the heel. Free glute work.",
+  "Right now: stand up, reach overhead, lean gently left then right. Ten seconds. Done — tip complete.",
+  "Squeeze your glutes for five seconds. Nobody can tell. Do it a few times today when you remember."
+];
 
-const HABITS = {
-  Standing:[
-    {id:'calf',t:'Calf raises',d:'Rise onto your toes and lower slowly — while the kettle boils, brushing teeth, in a queue. 10–15 slow reps.'},
-    {id:'oneleg',t:'Single-leg stand',d:'Shift your weight onto one leg for 20–30 seconds while doing something else. Right side especially.'},
-    {id:'hipcirc',t:'Standing hip circles',d:'Hands on hips, slow circles like a hula hoop. 5 each direction.'},
-  ],
-  Sitting:[
-    {id:'rock',t:'Pelvic rocking',d:'Tip your pelvis forward and back a few times while seated. Keeps the movement pattern fresh.'},
-    {id:'sitbones',t:'Sit-bones check',d:'Are you on your sit bones, or rolled back onto your tailbone? Notice and gently correct.'},
-    {id:'feet',t:'Feet flat check',d:'Uncross your legs, both feet flat on the floor. Reduces uneven load on the right side.'},
-    {id:'shoulders',t:'Shoulder rolls',d:'5 slow backward rolls. Counters the forward rounding from crochet and desk work.'},
-    {id:'chin',t:'Chin tucks',d:'Draw your chin straight back (brief double chin), hold a moment, release. 5 reps.'},
-  ],
-  Anywhere:[
-    {id:'glutes',t:'Glute squeezes',d:'Squeeze firmly for 5–10 seconds, release. Repeat a few times. Sitting, standing, anywhere.'},
-    {id:'door',t:'Doorframe hip-flexor step',d:'Take one slightly longer step through a doorway and feel a brief stretch at the front of the hip.'},
-    {id:'walk',t:'45-minute movement break',d:'Stand up and walk for 2 minutes — to the kitchen and back counts. The single highest-value habit.'},
-  ]
-};
-
+/* ============ EXERCISE DESCRIPTIONS ============ */
 const DESC = {
-  catcow:'On all fours, hands under shoulders, knees under hips. Inhale: belly drops, lower back arches gently, gaze forward. Exhale: round the whole spine up, tuck the tailbone, let the head drop. Flow with the breath — no pausing at either end. Neck stays in line with the spine.',
-  birddog:'On all fours. Extend your right arm forward and left leg back at the same time, spine completely still and neutral. Hold 5–10 seconds, lower, switch sides. If the lower back is very irritable today, skip this one and tick it off anyway.',
-  ham:'Lie on your back, strap around the ball of the foot, foot flexed (toes pulled toward your face). Raise the leg until you feel the back of the thigh — knee as straight as comfortable. The other leg presses flat into the floor. Hold completely still; ease a little deeper only on exhales. Head and shoulders stay down.',
-  fold:'Sit on a folded blanket or firm cushion so the pelvis can tip forward. Legs out in front, knees bent only as much as needed. Sit tall first, then hinge from the hips — not the waist or shoulders. Hands rest wherever they land, no pulling. Straight legs matter more than how far you fold.',
-  hipflex:'Lie across the bed with one leg hanging off the edge from mid-thigh down. Pull the other knee firmly to your chest with both hands. Let the hanging leg go completely heavy — gravity does the work, no effort. Travelling without a bed: kneeling lunge with the tailbone gently tucked.',
-  fig4:'Lie on your back with both feet on the wall, knees around 90°. Cross one ankle over the other knee, foot flexed to protect the knee. Shuffle closer to the wall to deepen, away to ease. No pulling with the arms — the wall does the work.',
-  calfA:'Face a wall, one foot stepped back, heel flat, back knee straight. Front leg also straight. Lean in until the upper calf of the back leg stretches. On the right side: comfortable range only, never force the ankle.',
-  calfB:'Same position, but bend the back knee slightly, heel still flat on the floor. The stretch moves lower and deeper, toward the Achilles.',
-  sidebend:'Sit cross-legged (or stand). Reach one arm overhead and lean directly sideways away from that arm, keeping both sit bones grounded. You should feel a long stretch from the top of the hip up along the lower ribs — the QL area, right where the mid-back ache lives.',
-  openbook:'Lie on your side, knees bent to 90°, both arms stacked straight out in front. Sweep the top arm up and across to the other side like opening a book, following it with your eyes. Let the chest rotate open. Slow — one breath per rep.',
-  tilts:'Lie on your back, knees bent, feet flat. Gently flatten your lower back into the floor, hold 5 seconds, release. Wakes the deep spinal stabilisers without loading anything that is irritated.'
+  catcow:'On all fours, hands under shoulders, knees under hips. Inhale: belly drops, lower back arches gently, gaze forward. Exhale: round the whole spine up, tuck the tailbone, let the head drop. Flow with the breath — no pausing at either end.',
+  birddog:'On all fours. Extend your right arm forward and left leg back at the same time, spine completely still. Hold 5–10 seconds, lower, switch sides. If the lower back is very irritable today, skip and tick it off anyway.',
+  ham:'Lie on your back, strap around the ball of the foot, foot flexed (toes toward your face). Raise the leg until you feel the back of the thigh — knee as straight as comfortable. Other leg presses flat into the floor. Hold still; ease deeper only on exhales.',
+  fold:'Sit on a folded blanket or firm cushion so the pelvis can tip forward. Legs out, knees bent only as much as needed. Sit tall first, then hinge from the hips — not the waist. Hands rest where they land. Straight legs matter more than distance.',
+  hipflex:'Lie across the bed with one leg hanging off the edge from mid-thigh down. Pull the other knee firmly to your chest. Let the hanging leg go completely heavy — gravity does the work. Travelling: kneeling lunge, tailbone gently tucked.',
+  fig4:'Lie on your back, feet on the wall, knees around 90°. Cross one ankle over the other knee, foot flexed. Shuffle closer to the wall to deepen, away to ease. No pulling — the wall does the work.',
+  calfA:'Face a wall, one foot stepped back, heel flat, back knee straight. Lean in until the upper calf stretches. Right side: comfortable range only, never force the ankle.',
+  calfB:'Same position, but bend the back knee slightly, heel flat. The stretch moves lower, toward the Achilles.',
+  sidebend:'Sit or stand. Reach one arm overhead and lean directly sideways away from that arm. Long stretch from hip to lower ribs — the QL area, right where the mid-back ache lives.',
+  openbook:'Lie on your side, knees bent 90°, arms stacked in front. Sweep the top arm up and across like opening a book, following with your eyes. Slow — one breath per rep.',
+  tilts:'Lie on your back, knees bent. Gently flatten the lower back into the floor, hold 5 seconds, release. Wakes the deep stabilisers without loading anything irritated.',
+  /* morning */
+  armcircles:'Stand relaxed. 10 slow backward arm circles, then 10 forward. Big and lazy, not fast — you are oiling the shoulders, not exercising.',
+  reach:'Stand, feet hip-width. Reach both arms overhead, stretch tall, then lean gently to the left for a breath, back to centre, then right. Slow.',
+  necktilts:'Stand or sit. Ear toward shoulder, hold two breaths, other side. Then chin toward chest, two breaths. Then slowly turn to look over each shoulder. Extra gentle and unhurried on the right.',
+  standfold:'Feet hip-width, knees softly bent. Fold forward and just hang — arms heavy, head heavy, no reaching for the floor. Bend the knees as much as you like. Roll up slowly, one vertebra at a time.',
+  shoulderlite:'Hands straight up ("robbery position"), hold a few breaths. Open out to a T, palms forward, hold. Then hands clasped behind your back, shoulders drawn back and down, chest open, hold.',
+  /* breaks */
+  physioseq:'Three positions, ~15–20 sec each. 1) Arms straight up, reach tall. 2) Open to a T, palms facing forward, squeeze gently back. 3) Clasp hands behind your back, draw shoulders back and down, open the chest.',
+  blades:'Standing or seated. Squeeze the shoulder blades together and slightly down — imagine holding a pencil between them — hold 5 sec, release. Repeat 5–6 times. Aim the squeeze at that spot beside the right shoulder blade.',
+  neckR:'Right hand behind your back (or holding the chair seat). Tilt your left ear toward your left shoulder until the right side of the neck stretches. Add a slight downward gaze to move it. Gentle — 7/10 max.',
+  balance:'Stand on one leg, 20–30 sec, then switch. By a wall if needed. Harder: eyes closed briefly. The right ankle gets a workout — that is the point.',
+  hipdoor:'Standing lunge: one foot forward, back leg straight, gently push hips forward until the front of the back hip stretches. 20 sec each side. A desk or wall for balance.',
+  twist:'Seated or standing: rotate the whole upper body to one side, using the chair back or a doorframe for a gentle hold. Two breaths each side.',
+  trap:'Seated or standing. Right hand reaches down and slightly behind. Tilt head left and slightly forward until the top of the right shoulder stretches. Two slow breaths, then swap.',
+  chestdoor:'Forearm on a doorframe, elbow at shoulder height. Step through gently until the chest and front of the shoulder open. 20 sec each side.'
 };
 
+/* ============ STEP BUILDERS ============ */
 const T =(name,side,secs,desc,group)=>({kind:'timed',name,side,secs,desc,group});
 const R =(name,label,desc)=>({kind:'reps',name,label,desc,group:name});
 
+/* Morning (~4 min, standing, easy) */
+const MORNING = [
+  R('Arm circles','10 back + 10 forward',DESC.armcircles),
+  T('Overhead reach + side lean',null,30,DESC.reach,'m2'),
+  T('Neck tilts + rotations',null,45,DESC.necktilts,'m3'),
+  T('Standing forward fold, knees soft',null,60,DESC.standfold,'m4'),
+  T('Shoulder opener: up → T → behind',null,45,DESC.shoulderlite,'m5'),
+];
+
+/* Breaks: 2 fixed + rotating pool */
+const BREAK_FIXED = [
+  {name:'Shoulder sequence: up → T → behind back',secs:60,desc:DESC.physioseq},
+  {name:'Shoulder blade squeezes',secs:45,desc:DESC.blades},
+];
+const BREAK_POOL = [
+  {name:'Right-side neck stretch',secs:45,desc:DESC.neckR},
+  {name:'Single-leg balance',secs:60,desc:DESC.balance},
+  {name:'Standing hip flexor stretch',secs:45,desc:DESC.hipdoor},
+  {name:'Gentle spinal twist',secs:45,desc:DESC.twist},
+  {name:'Trapezius stretch',secs:45,desc:DESC.trap},
+  {name:'Doorframe chest opener',secs:45,desc:DESC.chestdoor},
+];
+
+/* Stretch routines */
 const WARMUP = [
   R('Cat-Cow','10–15 fluid reps',DESC.catcow),
   R('Bird-Dog','8–10 each side',DESC.birddog),
@@ -217,6 +234,13 @@ const CALVES = [
 ];
 
 const ROUTINES = [
+  {id:'mini',name:'Mini session',mini:true,desc:'For 1 am nights, low days, sick days. Something beats nothing — always.',
+   steps:[
+     T('Hamstring stretch, strap','Right',60,DESC.ham,'ham'),
+     T('Hamstring stretch, strap','Left',60,DESC.ham,'ham'),
+     T('Seated forward fold',null,90,DESC.fold,'fold'),
+     T('Figure-four at wall','Right',90,DESC.fig4,'f4'),
+   ]},
   {id:'r1',name:'Glute / lower back flare',desc:'Hip flexor, figure-four and pelvic tilts weighted toward the right side.',
    steps:[...WARMUP,...CORE,...HIPFLEX(75),...FIG4,...TILTS]},
   {id:'r2',name:'Mid-back flare',desc:'QL side bends and open-book rotations for the spot below the bra strap.',
@@ -228,72 +252,62 @@ const ROUTINES = [
 ];
 
 function estMinutes(steps){
-  let s=0, reps=0;
+  let s=0,reps=0;
   steps.forEach(st=>{ if(st.kind==='timed') s+=st.secs; else reps++; });
-  s += reps*75;
-  s += steps.length*9;
+  s+=reps*75; s+=steps.length*9;
   return Math.round(s/60);
 }
 
-/* ============ STATE & STORAGE ============ */
-
-let state = null;
-const KEY='longsit_state_v1';
-
-async function loadState(){
-  try{
-    const r = await window.storage.get(KEY);
-    if(r && r.value){ state = JSON.parse(r.value); }
-  }catch(e){ /* first run or storage unavailable */ }
-  if(!state) state = {habitsDate:null,habitsPicked:[],habitsDone:[],weekStart:null,sessions:[],history:[]};
-  rollover();
-  await saveState();
-}
-async function saveState(){
-  try{ await window.storage.set(KEY, JSON.stringify(state)); }
-  catch(e){ /* keep going in memory */ }
-}
-
+/* ============ DATE HELPERS & DAILY PICKS ============ */
 function todayStr(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
-function mondayOf(dateStr){
-  const d = new Date(dateStr+'T12:00:00');
-  const day = (d.getDay()+6)%7;
-  d.setDate(d.getDate()-day);
-  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+function daySeed(){
+  const d=new Date();
+  return d.getFullYear()*372 + (d.getMonth()+1)*31 + d.getDate();
+}
+function tipOfDay(){ return TIPS[ daySeed() % TIPS.length ]; }
+function rotatingBreak(){ return BREAK_POOL[ daySeed() % BREAK_POOL.length ]; }
+
+/* ============ TODAY-ONLY STATE (localStorage, per date) ============ */
+const LSKEY='longsit_today_v2';
+let today = null;
+
+function loadToday(){
+  const t=todayStr();
+  try{
+    const raw=localStorage.getItem(LSKEY);
+    if(raw){
+      const s=JSON.parse(raw);
+      if(s.date===t){ today=s; return; }
+    }
+  }catch(e){}
+  today={date:t,morning:MORNING.map(()=>false),breaks:[false,false,false]};
+  saveToday();
+}
+function saveToday(){
+  try{ localStorage.setItem(LSKEY,JSON.stringify(today)); }catch(e){}
 }
 
-function rollover(){
-  const today = todayStr();
-  const curMon = mondayOf(today);
-  if(state.weekStart && state.weekStart!==curMon){
-    state.history.push({weekStart:state.weekStart,count:state.sessions.length});
-    if(state.history.length>26) state.history = state.history.slice(-26);
-    state.sessions=[];
-  }
-  state.weekStart = curMon;
-  if(state.habitsDate!==today){
-    state.habitsDate=today;
-    state.habitsPicked = pickHabits();
-    state.habitsDone=[false,false,false];
-  }
+/* ============ FEEDBACK: vibration + flash ============ */
+function buzz(){
+  try{
+    if(navigator.vibrate){ navigator.vibrate(200); }
+    else{
+      // iOS Safari haptic attempt via switch toggle
+      const lbl=document.getElementById('hapticLabel');
+      if(lbl) lbl.click();
+    }
+  }catch(e){}
+  document.body.classList.add('flash');
+  setTimeout(()=>document.body.classList.remove('flash'),1300);
 }
 
-function pickHabits(){
-  const cats=['Standing','Sitting','Anywhere'];
-  return cats.map(c=>{
-    const pool=HABITS[c];
-    const h=pool[Math.floor(Math.random()*pool.length)];
-    return {cat:c,id:h.id};
-  });
-}
-function habitById(cat,id){ return HABITS[cat].find(h=>h.id===id) || HABITS[cat][0]; }
-
-/* ============ VIEWS ============ */
-
+/* ============ APP STATE ============ */
 const app=document.getElementById('app');
 let view={name:'home'};
 let guided=null;
-let manualTimer=null;
+let timers={};   // key -> {remaining, interval}
+
+function fmt(s){ const m=Math.floor(s/60),ss=s%60; return m>0? m+':'+String(ss).padStart(2,'0') : ss+'s'; }
 
 function render(){
   if(view.name==='home') renderHome();
@@ -301,53 +315,55 @@ function render(){
   else if(view.name==='done') renderDone();
 }
 
-function renderHome(){
-  const today=todayStr();
-  const n=state.sessions.length;
-  const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-  const mon=new Date(state.weekStart+'T12:00:00');
-
-  let dots='';
-  for(let i=0;i<7;i++){
-    const d=new Date(mon); d.setDate(mon.getDate()+i);
-    const ds=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-    const done=state.sessions.includes(ds);
-    const bonus=done && state.sessions.indexOf(ds)>=5;
-    dots+=`<div class="wd ${done?(bonus?'bonus':'done'):''} ${ds===today?'today':''}">
-      <div class="dot">${done?(bonus?'★':'✓'):''}</div><div class="lbl">${days[i]}</div></div>`;
+/* ---- generic step row (used by morning, breaks) ---- */
+function stepRow(key,idx,step,checked,openKey){
+  const tk=key+idx;
+  const running=timers[tk];
+  const isOpen = view.open===tk;
+  let action='';
+  if(step.kind==='timed' || step.secs){
+    const secs=step.secs;
+    action=`<button class="qbtn ${running?'running':''}" onclick="event.stopPropagation();rowTimer('${key}',${idx},${secs})">${running?fmt(running.remaining):'▶ '+fmt(secs)}</button>`;
+  } else {
+    action=`<span class="sdur">${step.label}</span>`;
   }
+  return `<div class="step ${checked?'done':''} ${isOpen?'open':''}">
+    <div class="steprow">
+      <div class="scheck" onclick="rowCheck('${key}',${idx})">${checked?'✓':''}</div>
+      <div style="flex:1" onclick="rowCheck('${key}',${idx})">
+        <div class="sn">${step.name}</div>
+        ${step.side?`<div class="sside">${step.side}</div>`:''}
+        ${step.tag?`<div class="${step.tagClass}">${step.tag}</div>`:''}
+      </div>
+      ${action}
+      <button class="infoT" onclick="event.stopPropagation();toggleOpen('${tk}')">i</button>
+    </div>
+    <div class="sdesc">${step.desc}</div>
+  </div>`;
+}
 
-  const completedWeeks = state.history.filter(w=>w.count>=5).length;
-  let hist='';
-  state.history.slice(-8).forEach(w=>{
-    const d=new Date(w.weekStart+'T12:00:00');
-    const wl=(d.getDate())+'/'+(d.getMonth()+1);
-    let ic, cls='';
-    if(w.count>=7) ic='★★';
-    else if(w.count===6) ic='★';
-    else if(w.count===5) ic='✓';
-    else {ic='·'; cls='miss';}
-    hist+=`<div class="histweek ${cls}"><div class="ic">${ic}</div><div class="wl">${wl}</div></div>`;
-  });
+function renderHome(){
+  const dt=new Date();
+  const dateline=dt.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
+  const rot=rotatingBreak();
 
-  const habitsHtml = state.habitsPicked.map((p,i)=>{
-    const h=habitById(p.cat,p.id);
-    return `<div class="habit ${state.habitsDone[i]?'done':''}" onclick="toggleHabit(${i})">
-      <div class="hcheck">${state.habitsDone[i]?'✓':''}</div>
-      <div><div class="hcat">${p.cat}</div><div class="ht">${h.t}</div><div class="hd">${h.d}</div></div>
-    </div>`;
-  }).join('');
+  const morningDone = today.morning.every(x=>x);
+  const morningHtml = MORNING.map((s,i)=>stepRow('m',i,s,today.morning[i])).join('');
 
-  const loggedToday = state.sessions.includes(today);
+  const breakSteps = [
+    {...BREAK_FIXED[0],tag:'Daily',tagClass:'fixedtag'},
+    {...BREAK_FIXED[1],tag:'Daily',tagClass:'fixedtag'},
+    {...rot,tag:"Today's rotation",tagClass:'rotatetag'},
+  ];
+  const breaksDone = today.breaks.every(x=>x);
+  const breaksHtml = breakSteps.map((s,i)=>stepRow('b',i,s,today.breaks[i])).join('');
+
   const routinesHtml = ROUTINES.map(r=>`
-    <button class="rbtn" onclick="startRoutine('${r.id}')">
+    <button class="rbtn ${r.mini?'mini':''}" onclick="startRoutine('${r.id}')">
       <div class="rn">${r.name}</div>
       <div class="rd">${r.desc}</div>
       <div class="rt">~${estMinutes(r.steps)} min · ${r.steps.length} steps</div>
     </button>`).join('');
-
-  const dt=new Date();
-  const dateline=dt.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
 
   app.innerHTML=`
   <header>
@@ -356,31 +372,74 @@ function renderHome(){
     <div class="datebar">${dateline}</div>
   </header>
 
-  <div class="card">
-    <h2>This week ${n>=5?'<span class="goalhit">goal met ✓</span>':`<span class="weekcount">${n} / 5</span>`}</h2>
-    <div class="weekdots">${dots}</div>
-    <div class="weekmeta">
-      <span class="sub">${n>5?'Bonus days shine in rose ★':'5 sessions is the goal — extras earn stars'}</span>
-    </div>
-    ${state.history.length?`<div class="histrow">${hist}</div>
-    <div class="totweeks"><b>${completedWeeks}</b> completed week${completedWeeks===1?'':'s'} of 5+</div>`:''}
+  <div class="tipcard">
+    <div class="tiplabel">Today's focus</div>
+    <div class="tiptext">${tipOfDay()}</div>
   </div>
 
   <div class="card">
-    <h2>Today's micro-habits <button class="reshuffle" onclick="reshuffle()">↻ reshuffle</button></h2>
-    <div class="sub">One standing, one sitting, one anywhere. Every day.</div>
-    ${habitsHtml}
+    <h2>Morning · ~4 min ${morningDone?'<span class="alldone">done ✓</span>':''}</h2>
+    <div class="sub">Standing, straight out of bed. Tap a timer or just tick things off.</div>
+    ${morningHtml}
+  </div>
+
+  <div class="card">
+    <h2>Breaks · 3 × 1 min ${breaksDone?'<span class="alldone">done ✓</span>':''}</h2>
+    <div class="sub">Any time you surface from sitting or crafting. Desk- and toilet-friendly.</div>
+    ${breaksHtml}
   </div>
 
   <div class="card">
     <h2>Stretch session</h2>
-    <div class="sub">Pick the routine that matches today's body.</div>
+    <div class="sub">Pick what matches today's body — including the tiny one.</div>
     ${routinesHtml}
-    ${loggedToday
-      ?`<div class="loggedtag">Session logged today ✓ <button onclick="unlogToday()">undo</button></div>`
-      :`<button class="manualLog" onclick="logSession()">Did the routine without the app? Log it manually</button>`}
   </div>`;
 }
+
+/* ---- row actions ---- */
+window.toggleOpen=k=>{ view.open=(view.open===k?null:k); render(); };
+
+window.rowCheck=(key,idx)=>{
+  stopRowTimer(key+idx);
+  if(key==='m'){ today.morning[idx]=!today.morning[idx]; }
+  else if(key==='b'){ today.breaks[idx]=!today.breaks[idx]; }
+  else if(key==='s'){ view.checked[idx]=!view.checked[idx]; }
+  saveToday(); render();
+};
+
+function stopRowTimer(tk){
+  if(timers[tk]){ clearInterval(timers[tk].interval); delete timers[tk]; }
+}
+function stopAllTimers(){ Object.keys(timers).forEach(stopRowTimer); }
+
+window.rowTimer=(key,idx,secs)=>{
+  const tk=key+idx;
+  if(timers[tk]){ stopRowTimer(tk); render(); return; }
+  stopAllTimers();
+  timers[tk]={remaining:secs};
+  timers[tk].interval=setInterval(()=>{
+    if(!timers[tk]) return;
+    timers[tk].remaining--;
+    if(timers[tk].remaining<=0){
+      stopRowTimer(tk);
+      buzz();
+      if(key==='m') today.morning[idx]=true;
+      else if(key==='b') today.breaks[idx]=true;
+      else if(key==='s') view.checked[idx]=true;
+      saveToday();
+    }
+    render();
+  },1000);
+  render();
+};
+
+/* ---- stretch sessions ---- */
+window.startRoutine=id=>{
+  stopAllTimers();
+  const r=ROUTINES.find(x=>x.id===id);
+  view={name:'session',routine:r,mode:'manual',checked:r.steps.map(()=>false),open:null};
+  render();
+};
 
 function renderSession(){
   const r=view.routine;
@@ -388,28 +447,30 @@ function renderSession(){
 
   const steps=r.steps.map((s,i)=>{
     const checked=view.checked[i];
-    const running = manualTimer && manualTimer.idx===i;
+    const tk='s'+i;
+    const running=timers[tk];
+    const isOpen=view.open===tk;
     let action='';
     if(s.kind==='timed'){
-      action = `<button class="qbtn ${running?'running':''}" onclick="event.stopPropagation();manualStart(${i})">${running?fmt(manualTimer.remaining):'▶ '+fmt(s.secs)}</button>`;
+      action=`<button class="qbtn ${running?'running':''}" onclick="event.stopPropagation();rowTimer('s',${i},${s.secs})">${running?fmt(running.remaining):'▶ '+fmt(s.secs)}</button>`;
     } else {
-      action = `<span class="sdur">${s.label}</span>`;
+      action=`<span class="sdur">${s.label}</span>`;
     }
-    return `<div class="step ${checked?'done':''} ${view.open===i?'open':''}" id="step${i}">
+    return `<div class="step ${checked?'done':''} ${isOpen?'open':''}">
       <div class="steprow">
-        <div class="scheck" onclick="toggleStep(${i})">${checked?'✓':''}</div>
-        <div style="flex:1" onclick="toggleStep(${i})">
+        <div class="scheck" onclick="rowCheck('s',${i})">${checked?'✓':''}</div>
+        <div style="flex:1" onclick="rowCheck('s',${i})">
           <div class="sn">${s.name}</div>
           ${s.side?`<div class="sside">${s.side}</div>`:''}
         </div>
         ${action}
-        <button class="infoT" onclick="event.stopPropagation();toggleInfo(${i})">i</button>
+        <button class="infoT" onclick="event.stopPropagation();toggleOpen('${tk}')">i</button>
       </div>
       <div class="sdesc">${s.desc}</div>
     </div>`;
   }).join('');
 
-  const allDone = view.checked.every(c=>c);
+  const allDone=view.checked.every(c=>c);
 
   app.innerHTML=`
   <div class="sessHead">
@@ -421,32 +482,36 @@ function renderSession(){
     <button class="${view.mode==='guided'?'on':''}" onclick="setMode('guided')">Guided</button>
   </div>
   <div class="card">${steps}</div>
-  <button class="bigbtn ${allDone?'teal':'primary'}" onclick="finishSession()">${allDone?'Finish & log session ✓':'Log session'}</button>
-  <button class="bigbtn ghost" onclick="exitSession()">Exit without logging</button>`;
+  <button class="bigbtn ${allDone?'teal':'primary'}" onclick="finishSession()">${allDone?'Done ✓':'Finish'}</button>
+  <button class="bigbtn ghost" onclick="exitSession()">Back</button>`;
 }
 
-/* ---- guided mode ---- */
+window.setMode=m=>{
+  stopAllTimers();
+  view.mode=m;
+  if(m==='guided') startGuided();
+  else { if(guided&&guided.interval) clearInterval(guided.interval); guided=null; render(); }
+};
 
+/* ---- guided ---- */
 function buildTimeline(steps){
   const tl=[];
   steps.forEach((s,i)=>{
     tl.push({...s,stepIndex:i});
     if(i<steps.length-1){
       const next=steps[i+1];
-      const sameGroup = s.group && next.group===s.group;
+      const sameGroup=s.group && next.group===s.group;
       tl.push({kind:'rest',secs:sameGroup?5:10,label:sameGroup?'Switch sides':'Next exercise',next});
     }
   });
   return tl;
 }
-
 function startGuided(){
   const tl=buildTimeline(view.routine.steps);
   guided={tl,idx:0,remaining:null,paused:false,interval:null};
   if(navigator.wakeLock) navigator.wakeLock.request('screen').catch(()=>{});
   enterGuidedItem();
 }
-
 function enterGuidedItem(){
   if(guided.interval) clearInterval(guided.interval);
   const item=guided.tl[guided.idx];
@@ -459,16 +524,12 @@ function enterGuidedItem(){
     guided.remaining--;
     if(guided.remaining<=0){
       clearInterval(guided.interval);
-      document.body.classList.add('flash');
-      setTimeout(()=>document.body.classList.remove('flash'),1300);
+      buzz();
       if(item.stepIndex!==undefined) view.checked[item.stepIndex]=true;
       guided.idx++; enterGuidedItem();
-    } else {
-      updateGuidedTime();
-    }
+    } else { updateGuidedTime(); }
   },1000);
 }
-
 function guidedNext(){
   const item=guided.tl[guided.idx];
   if(guided.interval) clearInterval(guided.interval);
@@ -476,18 +537,17 @@ function guidedNext(){
   guided.idx++; enterGuidedItem();
 }
 function guidedComplete(){
-  if(guided && guided.interval) clearInterval(guided.interval);
+  if(guided&&guided.interval) clearInterval(guided.interval);
   guided=null;
   view.routine.steps.forEach((_,i)=>view.checked[i]=true);
   finishSession();
 }
 function exitGuided(){
-  if(guided && guided.interval) clearInterval(guided.interval);
-  guided=null;
-  view.mode='manual'; render();
+  if(guided&&guided.interval) clearInterval(guided.interval);
+  guided=null; view.mode='manual'; render();
 }
-
-function fmt(s){ const m=Math.floor(s/60),ss=s%60; return m>0? m+':'+String(ss).padStart(2,'0') : ss+'s'; }
+window.guidedNext=guidedNext; window.exitGuided=exitGuided;
+window.guidedPause=()=>{ guided.paused=!guided.paused; renderGuided(); };
 
 function renderGuided(){
   const item=guided.tl[guided.idx];
@@ -495,7 +555,7 @@ function renderGuided(){
   const stepsOnly=guided.tl.filter(t=>t.kind!=='rest');
   const stepNum=guided.tl.slice(0,guided.idx+1).filter(t=>t.kind!=='rest').length;
   const isRest=item.kind==='rest';
-  const nextItem = isRest? item.next : guided.tl.slice(guided.idx+1).find(t=>t.kind!=='rest');
+  const nextItem=isRest? item.next : guided.tl.slice(guided.idx+1).find(t=>t.kind!=='rest');
 
   let centre='';
   if(item.kind==='reps'){
@@ -514,7 +574,7 @@ function renderGuided(){
           <circle id="ring" cx="115" cy="115" r="104" fill="none" stroke="${isRest?'var(--teal)':'var(--primary)'}" stroke-width="10"
             stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C*(1-pct)}"/>
         </svg>
-        <div class="gtime"><div class="t" id="gtimeT">${fmt(rem)}</div><div class="u" id="gtimeU">${guided.paused?'paused':''}</div></div>
+        <div class="gtime"><div class="t" id="gtimeT">${fmt(rem)}</div><div class="u">${guided.paused?'paused':''}</div></div>
       </div>
       ${!isRest?`<div class="gdesc">${item.desc}</div>`:''}`;
   }
@@ -546,84 +606,27 @@ function updateGuidedTime(){
     ring.style.strokeDashoffset=C*(1-pct);
   }
 }
-function guidedPause(){ guided.paused=!guided.paused; renderGuided(); }
 
 /* ---- completion ---- */
+window.finishSession=()=>{ stopAllTimers(); view={name:'done'}; render(); };
+window.exitSession=()=>{ stopAllTimers(); if(guided&&guided.interval) clearInterval(guided.interval); guided=null; view={name:'home'}; render(); };
+window.goHome=()=>{ view={name:'home'}; render(); };
+
 function renderDone(){
-  const n=state.sessions.length;
-  const msg = n>5 ? 'Bonus session — that\u2019s a star ★' :
-              n===5 ? 'That was your 5th — week complete!' :
-              `${n} of 5 this week.`;
   app.innerHTML=`
   <div class="card celebrate" style="margin-top:60px">
-    <div class="big">${n>=5?'★':'✓'}</div>
-    <h2>Session logged</h2>
-    <p>${msg}</p>
+    <div class="big">✓</div>
+    <h2>Session done</h2>
+    <p>Your hamstrings are a little longer than they were 25 minutes ago.</p>
     <button class="bigbtn primary" onclick="goHome()">Back to today</button>
   </div>`;
 }
 
-/* ============ ACTIONS ============ */
-
-window.toggleHabit=async i=>{ state.habitsDone[i]=!state.habitsDone[i]; await saveState(); render(); };
-window.reshuffle=async ()=>{ state.habitsPicked=pickHabits(); state.habitsDone=[false,false,false]; await saveState(); render(); };
-
-window.startRoutine=id=>{
-  const r=ROUTINES.find(x=>x.id===id);
-  view={name:'session',routine:r,mode:'manual',checked:r.steps.map(()=>false),open:null};
-  render();
-};
-window.setMode=m=>{
-  stopManualTimer();
-  view.mode=m;
-  if(m==='guided') startGuided();
-  else { if(guided && guided.interval) clearInterval(guided.interval); guided=null; render(); }
-};
-window.toggleStep=i=>{ view.checked[i]=!view.checked[i]; render(); };
-window.toggleInfo=i=>{ view.open = (view.open===i? null : i); render(); };
-
-function stopManualTimer(){ if(manualTimer){clearInterval(manualTimer.interval); manualTimer=null;} }
-window.manualStart=i=>{
-  if(manualTimer && manualTimer.idx===i){ stopManualTimer(); render(); return; }
-  stopManualTimer();
-  const s=view.routine.steps[i];
-  manualTimer={idx:i,remaining:s.secs};
-  manualTimer.interval=setInterval(()=>{
-    if(!manualTimer) return;
-    manualTimer.remaining--;
-    if(manualTimer.remaining<=0){
-      stopManualTimer();
-      view.checked[i]=true;
-      document.body.classList.add('flash');
-      setTimeout(()=>document.body.classList.remove('flash'),1300);
-    }
-    render();
-  },1000);
-  render();
-};
-
-window.finishSession=async ()=>{
-  stopManualTimer();
-  await logSessionInternal();
-  view={name:'done'};
-  render();
-};
-window.exitSession=()=>{ stopManualTimer(); if(guided && guided.interval) clearInterval(guided.interval); guided=null; view={name:'home'}; render(); };
-window.goHome=()=>{ view={name:'home'}; render(); };
-
-async function logSessionInternal(){
-  const t=todayStr();
-  if(!state.sessions.includes(t)) state.sessions.push(t);
-  await saveState();
-}
-window.logSession=async ()=>{ await logSessionInternal(); render(); };
-window.unlogToday=async ()=>{
-  state.sessions=state.sessions.filter(d=>d!==todayStr());
-  await saveState(); render();
-};
-
 /* ============ INIT ============ */
-loadState().then(render);
+loadToday();
+render();
+/* refresh daily content if the app stays open past midnight */
+setInterval(()=>{ if(today.date!==todayStr()){ loadToday(); if(view.name==='home') render(); } },60000);
 </script>
 </body>
 </html>
