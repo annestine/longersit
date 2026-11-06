@@ -101,6 +101,25 @@
   .celebrate h2{font-size:22px;margin-top:8px}
   .celebrate p{color:var(--muted);margin-top:6px;font-size:14px}
 
+  .tabs{margin:4px 0 16px}
+  .exname{font-weight:700;font-size:16px}
+  .exhead{display:flex;align-items:flex-start;gap:10px}
+  .extarget{font-size:13px;color:var(--primary-deep);font-weight:700;margin-top:2px}
+  .exhead .infoT{margin-left:auto}
+  .card.exc.open .sdesc{display:block}
+  .card.exc{padding:16px 18px}
+  .weektag{display:inline-block;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--rose);font-weight:800;background:var(--rose-soft);border-radius:6px;padding:2px 6px;margin-top:4px}
+  .setrow{display:flex;align-items:center;gap:12px;padding:9px 0;border-top:1px solid var(--line)}
+  .setrow:first-of-type{margin-top:10px}
+  .setrow.done .scheck{background:var(--teal);border-color:var(--teal)}
+  .setrow.done .setlbl{color:var(--muted);text-decoration:line-through}
+  .setlbl{flex:1;font-size:14px;font-weight:600}
+  .restbar{position:fixed;left:50%;transform:translateX(-50%);bottom:14px;width:calc(100% - 32px);max-width:448px;background:var(--primary-deep);color:#fff;border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 28px rgba(42,52,65,.25);z-index:40}
+  .restbar .rlab{font-size:11px;letter-spacing:.12em;text-transform:uppercase;opacity:.8;font-weight:700}
+  .restbar .rtime{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.1}
+  .restbar .rnext{flex:1;font-size:13px;opacity:.9}
+  .restbar button{background:rgba(255,255,255,.18);color:#fff;border:none;border-radius:10px;padding:9px 14px;font-weight:800;font-family:inherit;cursor:pointer}
+  .padbottom{height:90px}
   .switchwrap{position:absolute;left:-9999px;top:-9999px}
   @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
   button:focus-visible{outline:3px solid var(--primary);outline-offset:2px}
@@ -294,11 +313,12 @@ function loadToday(){
       if(s.date===t && Array.isArray(s.morning) && s.morning.length===MORNING.length
          && Array.isArray(s.breaks) && s.breaks.length===3){
         if(!Array.isArray(s.sessions)) s.sessions=[];
+        if(!Array.isArray(s.strength)) s.strength=[];
         today=s; return;
       }
     }
   }catch(e){}
-  today={date:t,morning:MORNING.map(()=>false),breaks:[false,false,false],sessions:[]};
+  today={date:t,morning:MORNING.map(()=>false),breaks:[false,false,false],sessions:[],strength:[]};
   saveToday();
 }
 function saveToday(){
@@ -329,6 +349,7 @@ function fmt(s){ const m=Math.floor(s/60),ss=s%60; return m>0? m+':'+String(ss).
 function render(){
   if(view.name==='home') renderHome();
   else if(view.name==='session') renderSession();
+  else if(view.name==='strength') renderStrengthSession();
   else if(view.name==='done') renderDone();
 }
 
@@ -358,7 +379,31 @@ function stepRow(key,idx,step,checked){
   </div>`;
 }
 
+let currentTab='daily';
+try{ const t=localStorage.getItem('longsit_tab'); if(t==='strength'||t==='daily') currentTab=t; }catch(e){}
+
+function headerHtml(){
+  const dt=new Date();
+  const dateline=dt.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
+  return `<header>
+    <div class="brand">Long Sit Club</div>
+    <h1>Hi Stina</h1>
+    <div class="datebar">${dateline}</div>
+  </header>
+  <div class="modetog tabs">
+    <button class="${currentTab==='daily'?'on':''}" onclick="setTab('daily')">Daily</button>
+    <button class="${currentTab==='strength'?'on':''}" onclick="setTab('strength')">Strength</button>
+  </div>`;
+}
+window.setTab=t=>{
+  stopAllTimers();
+  currentTab=t;
+  try{ localStorage.setItem('longsit_tab',t); }catch(e){}
+  render(); window.scrollTo(0,0);
+};
+
 function renderHome(){
+  if(currentTab==='strength'){ renderStrengthTab(); return; }
   const dt=new Date();
   const dateline=dt.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
   const rot=rotatingBreak();
@@ -386,11 +431,7 @@ function renderHome(){
     </button>`;}).join('');
 
   app.innerHTML=`
-  <header>
-    <div class="brand">Long Sit Club</div>
-    <h1>Hi Stina</h1>
-    <div class="datebar">${dateline}</div>
-  </header>
+  ${headerHtml()}
 
   <div class="card">
     <h2>Morning · ~5 min ${morningDone?'<span class="alldone">done ✓</span>':''}</h2>
@@ -637,10 +678,223 @@ function renderDone(){
   <div class="card celebrate" style="margin-top:60px">
     <div class="big">✓</div>
     <h2>Session done</h2>
-    <p>A little longer and looser than when you started.</p>
+    <p>${view.msg || 'A little longer and looser than when you started.'}</p>
     <button class="bigbtn primary" onclick="goHome()">Back to today</button>
   </div>`;
 }
+
+/* ============ STRENGTH ============ */
+const REST_SECS = 30;
+const two =(label)=>[{label:'Set 1 · '+label},{label:'Set 2 · '+label,noRest:true}];
+const sideHolds =(secs)=>[
+  {label:'Set 1 · Right side',secs,noRest:true},{label:'Set 1 · Left side',secs},
+  {label:'Set 2 · Right side',secs,noRest:true},{label:'Set 2 · Left side',secs,noRest:true},
+];
+const SD = {
+  warm:'Two gentle minutes to get blood into the back and hips before loading them: slow Cat-Cow on all fours, then march on the spot lifting the knees. Never skip this one — it costs 90 seconds.',
+  deadbug:'Lie on your back, arms pointing at the ceiling, knees bent 90° above the hips. Press the lower back gently into the floor and keep it there. Slowly lower the right arm overhead and the left leg toward the floor as you exhale, return, switch. Slow is the whole point. Head stays down — no neck work. Easier: move only the legs.',
+  birddog:'On all fours. Brace lightly, as if someone is about to poke your belly. Extend the right arm and left leg until level with the body — no higher — hold 5 seconds without the hips tipping, return, switch. Imagine a cup of tea balanced on your lower back.',
+  bridgeH:'On your back, knees bent, feet flat, a dumbbell or kettlebell resting across the hip bones (hold it with both hands). Push through the heels and lift until knees, hips and shoulders form a line. Squeeze the glutes 2 seconds at the top, lower slowly. Feel it in the glutes — if it is the hamstrings, walk the feet closer. When 12 feels easy: single-leg bridges, no weight.',
+  bridgeT:'On your back, knees bent, feet flat. Push through the heels and lift until knees, hips and shoulders form a line. Squeeze the glutes 2 seconds at the top, lower slowly. When 12 feels easy: single-leg bridges, 8 per side. Band above the knees, pushing them gently apart, adds glute-medius work.',
+  sideleg:'Lie on your side, bottom knee bent for stability, top leg straight and slightly behind your body, toes pointing forward (not up). Lift the top leg slowly to about 30–40°, hold 1 second, lower slowly. You should feel it at the top/side of the hip, not the front of the thigh. Small and correct beats big and sloppy. Harder: band above the knees.',
+  clam:'Band just above the knees. Lie on your side, hips and knees bent about 45°, heels together. Keeping the heels touching and the pelvis still (do not roll backward), open the top knee like a clamshell, pause, lower slowly.',
+  sideplank:'Lie on your side, elbow directly under the shoulder, knees bent. Lift the hips so the body forms a straight line from head to knees, top hand on the hip. Breathe normally. When 30 seconds feels solid, straighten the legs. If the shoulder complains, lower the hips and shorten the hold.',
+  extrotH:'Lie on your left side, light dumbbell in the right hand, right elbow bent 90° and tucked to your side (a rolled towel between elbow and ribs helps). Rotate the forearm up toward the ceiling, elbow glued in place, then lower slowly. Light — 1–2 kg is plenty; this is a small, important muscle.',
+  extrotT:'Band in both hands, elbows bent 90° and tucked to your sides, palms up. Rotate the forearms outward, elbows glued to your sides, shoulder blades gently squeezing. Return slowly — the way back counts as much as the way out.',
+  splitH:'Long stride, back heel lifted, a dumbbell in each hand (or none to start). Lower straight down until the back knee nearly touches the floor, torso tall, then push up through the front heel. Hold a wall or chair if balance is shaky. The right ankle may feel limited in the back position — shorten the stride on that side if so.',
+  splitT:'Long stride, back heel lifted. Lower straight down until the back knee nearly touches the floor, torso tall, then push up through the front heel. Hold a wall or chair if needed. Shorten the stride if the right ankle complains in the back position.',
+  dl:'Kettlebell on the floor between your feet, feet hip-width. Push the hips back as if closing a car door with your bottom, soft knees, flat back, grip the bell. Stand by driving the hips forward and squeezing the glutes — no leaning back at the top. Lower by pushing the hips back again. If your back rounds to reach, raise the bell on a step or thick book. Skip this until you have had 2–3 pain-free weeks, then start light.',
+  gm:'Hands crossed on your chest, soft knees. Push the hips back and let the torso tip forward with a flat back until the hamstrings tighten, then drive the hips forward to stand. This trains the hip hinge — the movement that protects your back every time you pick something up. Skip until you have had 2–3 pain-free weeks.',
+  rowH:'One knee and hand on a bed, bench or chair, back flat. Dumbbell in the other hand, arm hanging. Pull the elbow up toward your hip pocket, squeezing the shoulder blade back and down. Lower slowly. No shrugging toward the ear — the neck stays relaxed.',
+  rowT:'Sit on the floor, legs straight, band looped around your feet (or anchored in a closed door at chest height while standing). Pull both elbows back along your sides, squeeze the shoulder blades together and down, pause, release slowly. Neck relaxed.',
+  wall:'Back against a wall, feet a small step forward, lower back gently toward the wall. Arms in a goal-post position, backs of the forearms toward the wall. Slide the arms up only as far as you can without the back arching or the arms leaving the wall, then pull them down, drawing the shoulder blades into your back pockets. Control matters more than range.'
+};
+const WARM = {name:'Warm-up: Cat-Cow + marching',target:'90 seconds',desc:SD.warm,sets:[{label:'Warm-up',secs:90,noRest:true}]};
+const STRENGTH = [
+  {id:'home',name:'Home · with weights',desc:'Dumbbells and kettlebell. Floor work first, then standing.',
+   ex:[
+     WARM,
+     {name:'Dead bug',target:'8 per side, slow',desc:SD.deadbug,sets:two('8 per side')},
+     {name:'Bird-dog',target:'6 per side, 5-sec hold',desc:SD.birddog,sets:two('6 per side')},
+     {name:'Glute bridge, weighted',target:'12 reps',desc:SD.bridgeH,sets:two('12 reps')},
+     {name:'Side-lying leg raise',target:'12 per side',desc:SD.sideleg,sets:two('12 per side')},
+     {name:'Side plank, knees',target:'20 sec per side',desc:SD.sideplank,sets:sideHolds(20)},
+     {name:'Side-lying external rotation',target:'12 per side, light',desc:SD.extrotH,sets:two('12 per side')},
+     {name:'Split squat',target:'8 per side',desc:SD.splitH,sets:two('8 per side')},
+     {name:'Kettlebell deadlift',target:'10 reps',tag:'From week 3',optional:true,desc:SD.dl,sets:two('10 reps')},
+     {name:'One-arm dumbbell row',target:'10 per side',desc:SD.rowH,sets:two('10 per side')},
+     {name:'Wall slides',target:'10 slow reps',desc:SD.wall,sets:two('10 reps')},
+   ]},
+  {id:'travel',name:'Travel · band + bodyweight',desc:'Just you, a floor, a wall and your band.',
+   ex:[
+     WARM,
+     {name:'Dead bug',target:'8 per side, slow',desc:SD.deadbug,sets:two('8 per side')},
+     {name:'Bird-dog',target:'6 per side, 5-sec hold',desc:SD.birddog,sets:two('6 per side')},
+     {name:'Glute bridge',target:'12 reps',desc:SD.bridgeT,sets:two('12 reps')},
+     {name:'Band clamshell',target:'15 per side',desc:SD.clam,sets:two('15 per side')},
+     {name:'Side plank, knees',target:'20 sec per side',desc:SD.sideplank,sets:sideHolds(20)},
+     {name:'Seated band row',target:'12 reps',desc:SD.rowT,sets:two('12 reps')},
+     {name:'Split squat',target:'10 per side',desc:SD.splitT,sets:two('10 per side')},
+     {name:'Bodyweight good morning',target:'12 reps',tag:'From week 3',optional:true,desc:SD.gm,sets:two('12 reps')},
+     {name:'Band external rotation',target:'15 reps',desc:SD.extrotT,sets:two('15 reps')},
+     {name:'Wall slides',target:'10 slow reps',desc:SD.wall,sets:two('10 reps')},
+   ]},
+];
+
+function strengthMinutes(r){
+  let s=0;
+  r.ex.forEach(e=>e.sets.forEach(st=>{
+    s += st.secs ? st.secs : (/per side/.test(st.label)?55:35);
+    if(!st.noRest) s += REST_SECS;
+  }));
+  s += r.ex.length*10;
+  return Math.round(s/60);
+}
+
+let rest=null;
+function stopRest(){ if(rest){ clearInterval(rest.interval); rest=null; } }
+
+function renderStrengthTab(){
+  const done=today.strength.length>0;
+  const btns=STRENGTH.map(r=>{
+    const d=today.strength.includes(r.id);
+    return `<button class="rbtn ${d?'completed':''}" onclick="startStrength('${r.id}')">
+      ${d?'<span class="rdone">done ✓</span>':''}
+      <div class="rn">${r.name}</div>
+      <div class="rd">${r.desc}</div>
+      <div class="rt">~${strengthMinutes(r)} min · ${r.ex.length} exercises · 2 sets</div>
+    </button>`;
+  }).join('');
+  app.innerHTML=`
+  ${headerHtml()}
+  <div class="card">
+    <h2>Strength session ${done?'<span class="alldone">done ✓</span>':''}</h2>
+    <div class="sub">2–3 times a week. Sciatica prevention and stronger shoulders.</div>
+    ${btns}
+  </div>
+  <div class="card">
+    <h2>Ground rules</h2>
+    <div class="sub" style="margin-top:8px">• Effort and mild discomfort up to 3/10 is fine.<br>• Anything travelling down a leg, tingling or numbness: stop that exercise.<br>• Slow and controlled beats heavy and fast — every time.<br>• When 2 sets feel easy for a week, progress: more weight, longer hold, or the harder version in the ⓘ.</div>
+  </div>`;
+}
+
+window.startStrength=id=>{
+  stopAllTimers(); stopRest();
+  const r=STRENGTH.find(x=>x.id===id);
+  view={name:'strength',routine:r,checked:r.ex.map(e=>e.sets.map(()=>false)),open:null};
+  render(); window.scrollTo(0,0);
+};
+
+function renderStrengthSession(){
+  const r=view.routine;
+  const cards=r.ex.map((e,ei)=>{
+    const sets=e.sets.map((st,si)=>{
+      const tk='st'+ei+'_'+si;
+      const running=timers[tk];
+      const c=view.checked[ei][si];
+      const btn = st.secs ? `<button class="qbtn ${running?'running':''}" onclick="event.stopPropagation();strengthTimer(${ei},${si})">${running?fmt(running.remaining):'▶ '+fmt(st.secs)}</button>` : '';
+      return `<div class="setrow ${c?'done':''}">
+        <div class="scheck" onclick="setCheck(${ei},${si})">${c?'✓':''}</div>
+        <div class="setlbl" onclick="setCheck(${ei},${si})">${st.label}</div>
+        ${btn}
+      </div>`;
+    }).join('');
+    return `<div class="card exc ${view.open===ei?'open':''}">
+      <div class="exhead">
+        <div>
+          <div class="exname">${e.name}</div>
+          <div class="extarget">${e.target}</div>
+          ${e.tag?`<span class="weektag">${e.tag}</span>`:''}
+        </div>
+        <button class="infoT" onclick="toggleEx(${ei})">i</button>
+      </div>
+      <div class="sdesc">${e.desc}</div>
+      ${sets}
+    </div>`;
+  }).join('');
+
+  const required=r.ex.filter(e=>!e.optional);
+  const allDone=r.ex.every((e,ei)=>e.optional || view.checked[ei].every(x=>x));
+
+  const restHtml = rest ? `<div class="restbar">
+      <div><div class="rlab">Rest</div><div class="rtime">${fmt(rest.remaining)}</div></div>
+      <div class="rnext">${rest.next?'Next: <b>'+rest.next+'</b>':''}</div>
+      <button onclick="skipRest()">Skip</button>
+    </div>` : '';
+
+  app.innerHTML=`
+  <div class="sessHead">
+    <button class="back" onclick="exitStrength()">←</button>
+    <div><h1>${r.name}</h1><div class="sub">~${strengthMinutes(r)} min · tap a set when it's done</div></div>
+  </div>
+  ${cards}
+  <button class="bigbtn ${allDone?'teal':'primary'}" onclick="finishStrength()">${allDone?'Done ✓':'Finish'}</button>
+  <button class="bigbtn ghost" onclick="exitStrength()">Back</button>
+  <div class="padbottom"></div>
+  ${restHtml}`;
+}
+
+window.toggleEx=ei=>{ view.open=(view.open===ei?null:ei); render(); };
+
+function nextSetLabel(ei,si){
+  const r=view.routine;
+  for(let e=ei;e<r.ex.length;e++){
+    for(let s=(e===ei?si+1:0);s<r.ex[e].sets.length;s++){
+      if(!view.checked[e][s]) return {name:r.ex[e].name, label:r.ex[e].sets[s].label};
+    }
+  }
+  return null;
+}
+
+function startRest(ei,si){
+  stopRest();
+  const st=view.routine.ex[ei].sets[si];
+  if(st.noRest) return;
+  const nx=nextSetLabel(ei,si);
+  if(!nx) return;
+  rest={remaining:REST_SECS,next:nx.name};
+  rest.interval=setInterval(()=>{
+    if(!rest) return;
+    rest.remaining--;
+    if(rest.remaining<=0){ stopRest(); buzz(); }
+    if(view.name==='strength') render();
+  },1000);
+}
+window.skipRest=()=>{ stopRest(); render(); };
+
+window.setCheck=(ei,si)=>{
+  stopRowTimer('st'+ei+'_'+si);
+  view.checked[ei][si]=!view.checked[ei][si];
+  if(view.checked[ei][si]) startRest(ei,si); else stopRest();
+  render();
+};
+
+window.strengthTimer=(ei,si)=>{
+  const tk='st'+ei+'_'+si;
+  if(timers[tk]){ stopRowTimer(tk); render(); return; }
+  stopAllTimers(); stopRest();
+  const st=view.routine.ex[ei].sets[si];
+  timers[tk]={remaining:st.secs};
+  timers[tk].interval=setInterval(()=>{
+    if(!timers[tk]) return;
+    timers[tk].remaining--;
+    if(timers[tk].remaining<=0){
+      stopRowTimer(tk);
+      buzz();
+      view.checked[ei][si]=true;
+      startRest(ei,si);
+    }
+    render();
+  },1000);
+  render();
+};
+
+window.finishStrength=()=>{
+  stopAllTimers(); stopRest();
+  if(!today.strength.includes(view.routine.id)){ today.strength.push(view.routine.id); saveToday(); }
+  view={name:'done',msg:'Strong back, strong shoulders. Good work.'}; render(); window.scrollTo(0,0);
+};
+window.exitStrength=()=>{ stopAllTimers(); stopRest(); view={name:'home'}; render(); window.scrollTo(0,0); };
 
 /* ============ INIT ============ */
 loadToday();
