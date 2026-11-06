@@ -29,12 +29,10 @@
   .card h2{font-size:15px;font-weight:700;letter-spacing:.02em;display:flex;align-items:center;justify-content:space-between;gap:8px}
   .sub{color:var(--muted);font-size:13px;margin-top:2px}
 
-  /* tip */
-  .tipcard{background:linear-gradient(135deg,#F6F1E7,#F3E4EA);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px 18px;margin-bottom:16px}
+  .tipcard{background:linear-gradient(135deg,#F6F1E7,#F3E4EA);border-left:5px solid var(--gold);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 18px 18px 16px;margin-bottom:16px}
   .tiplabel{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-weight:800}
-  .tiptext{font-size:15px;font-weight:600;margin-top:4px;line-height:1.5}
+  .tiptext{font-size:17px;font-weight:700;margin-top:6px;line-height:1.45}
 
-  /* steps */
   .step{padding:12px 0;border-bottom:1px solid var(--line)}
   .step:last-child{border-bottom:none;padding-bottom:4px}
   .steprow{display:flex;align-items:center;gap:12px}
@@ -53,13 +51,14 @@
   .rotatetag{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--rose);font-weight:700}
   .alldone{color:var(--teal);font-weight:700;font-size:13px}
 
-  /* routine picker */
   .rbtn{width:100%;text-align:left;background:var(--bg);border:2px solid transparent;border-radius:14px;padding:14px;margin-top:10px;cursor:pointer;font-family:inherit;transition:all .15s}
   .rbtn:active{transform:scale(.985)}
   .rbtn .rn{font-weight:700;font-size:15px;color:var(--ink)}
   .rbtn .rd{font-size:13px;color:var(--muted);margin-top:2px}
   .rbtn .rt{font-size:12px;color:var(--primary-deep);font-weight:700;margin-top:4px}
   .rbtn.mini{border:2px dashed var(--line);background:var(--card)}
+  .rbtn.completed{background:var(--teal-soft);border-color:var(--teal)}
+  .rbtn .rdone{float:right;color:var(--teal);font-weight:800;font-size:13px}
 
   .sessHead{display:flex;align-items:center;gap:10px;padding:22px 4px 12px}
   .back{background:var(--card);border:none;width:38px;height:38px;border-radius:12px;font-size:17px;cursor:pointer;box-shadow:var(--shadow);color:var(--ink)}
@@ -109,11 +108,10 @@
 </head>
 <body>
 <div class="wrap" id="app"></div>
-<!-- hidden switch for iOS haptic attempt -->
 <label class="switchwrap" id="hapticLabel"><input type="checkbox" switch id="hapticSwitch"></label>
 
 <script>
-/* ============ DAILY TIPS (no posture-policing) ============ */
+/* ============ DAILY TIPS ============ */
 const TIPS = [
   "Alternate which leg you cross today — every time you notice, swap. Same comfort, half the asymmetry.",
   "Crafting or handwork today? Bring the work up to you, not your head down to the work. Elbows supported helps.",
@@ -145,94 +143,68 @@ const TIPS = [
 /* ============ EXERCISE DESCRIPTIONS ============ */
 const DESC = {
   catcow:'On all fours, hands under shoulders, knees under hips. Inhale: belly drops, lower back arches gently, gaze forward. Exhale: round the whole spine up, tuck the tailbone, let the head drop. Flow with the breath — no pausing at either end.',
-  birddog:'On all fours. Extend your right arm forward and left leg back at the same time, spine completely still. Hold 5–10 seconds, lower, switch sides. If the lower back is very irritable today, skip and tick it off anyway.',
   ham:'Lie on your back, strap around the ball of the foot, foot flexed (toes toward your face). Raise the leg until you feel the back of the thigh — knee as straight as comfortable. Other leg presses flat into the floor. Hold still; ease deeper only on exhales.',
-  fold:'Sit on a folded blanket or firm cushion so the pelvis can tip forward. Legs out, knees bent only as much as needed. Sit tall first, then hinge from the hips — not the waist. Hands rest where they land. Straight legs matter more than distance.',
-  hipflex:'Lie across the bed with one leg hanging off the edge from mid-thigh down. Pull the other knee firmly to your chest. Let the hanging leg go completely heavy — gravity does the work. Travelling: kneeling lunge, tailbone gently tucked.',
+  fold:'Sit on the floor, legs out in front. Sit tall first, then hinge from the hips — not the waist. Hands rest where they land, no pulling. You have earned the propless version — if a flare day makes it hard, a folded blanket is always allowed back.',
+  butterfly:'Sit tall, soles of the feet together, knees falling out to the sides. Hold the ankles (not the toes) and let gravity lower the knees — no pressing. To deepen: hinge slightly forward from the hips, back long.',
   fig4:'Lie on your back, feet on the wall, knees around 90°. Cross one ankle over the other knee, foot flexed. Shuffle closer to the wall to deepen, away to ease. No pulling — the wall does the work.',
   calfA:'Face a wall, one foot stepped back, heel flat, back knee straight. Lean in until the upper calf stretches. Right side: comfortable range only, never force the ankle.',
   calfB:'Same position, but bend the back knee slightly, heel flat. The stretch moves lower, toward the Achilles.',
   sidebend:'Sit or stand. Reach one arm overhead and lean directly sideways away from that arm. Long stretch from hip to lower ribs — the QL area, right where the mid-back ache lives.',
   openbook:'Lie on your side, knees bent 90°, arms stacked in front. Sweep the top arm up and across like opening a book, following with your eyes. Slow — one breath per rep.',
   tilts:'Lie on your back, knees bent. Gently flatten the lower back into the floor, hold 5 seconds, release. Wakes the deep stabilisers without loading anything irritated.',
+  hipstand:'Standing lunge: one foot forward, back leg straight — the straight back knee is what makes it work. Tailbone gently tucked, then push the hips forward until the front of the back hip stretches. A wall or desk for balance. 7/10 intensity.',
   /* morning */
   armcircles:'Stand relaxed. 10 slow backward arm circles, then 10 forward. Big and lazy, not fast — you are oiling the shoulders, not exercising.',
   reach:'Stand, feet hip-width. Reach both arms overhead, stretch tall, then lean gently to the left for a breath, back to centre, then right. Slow.',
   necktilts:'Stand or sit. Ear toward shoulder, hold two breaths, other side. Then chin toward chest, two breaths. Then slowly turn to look over each shoulder. Extra gentle and unhurried on the right.',
   standfold:'Feet hip-width, knees softly bent. Fold forward and just hang — arms heavy, head heavy, no reaching for the floor. Bend the knees as much as you like. Roll up slowly, one vertebra at a time.',
-  shoulderlite:'Hands straight up ("robbery position"), hold a few breaths. Open out to a T, palms forward, hold. Then hands clasped behind your back, shoulders drawn back and down, chest open, hold.',
+  crossbody:'Each arm, two positions. 1) Pull the arm straight across your chest with the other hand, shoulder down — feel the back of the shoulder. 2) Reach the same arm overhead, bend the elbow so the hand drops behind your neck, other hand gently assists at the elbow — feel the top of the arm. ~15 sec per position. The tight right side gets the same time, not more force.',
+  balance:'Stand on one leg, 30 sec, then switch. Near a wall if needed. Harder: slow head turns, or eyes closed briefly. The right ankle gets a daily workout — that is the point.',
   /* breaks */
-  physioseq:'Three positions, ~15–20 sec each. 1) Arms straight up, reach tall. 2) Open to a T, palms facing forward, squeeze gently back. 3) Clasp hands behind your back, draw shoulders back and down, open the chest.',
+  eagle:'Wrap one arm under the other, elbows stacked, backs of hands (or palms) together. Now lift the elbows slightly and push them gently forward — the stretch lands right between and behind the shoulder blades. ~20 sec, then swap which arm is on top.',
   blades:'Standing or seated. Squeeze the shoulder blades together and slightly down — imagine holding a pencil between them — hold 5 sec, release. Repeat 5–6 times. Aim the squeeze at that spot beside the right shoulder blade.',
   neckR:'Right hand behind your back (or holding the chair seat). Tilt your left ear toward your left shoulder until the right side of the neck stretches. Add a slight downward gaze to move it. Gentle — 7/10 max.',
-  balance:'Stand on one leg, 20–30 sec, then switch. By a wall if needed. Harder: eyes closed briefly. The right ankle gets a workout — that is the point.',
-  hipdoor:'Standing lunge: one foot forward, back leg straight, gently push hips forward until the front of the back hip stretches. 20 sec each side. A desk or wall for balance.',
   twist:'Seated or standing: rotate the whole upper body to one side, using the chair back or a doorframe for a gentle hold. Two breaths each side.',
   trap:'Seated or standing. Right hand reaches down and slightly behind. Tilt head left and slightly forward until the top of the right shoulder stretches. Two slow breaths, then swap.',
-  chestdoor:'Forearm on a doorframe, elbow at shoulder height. Step through gently until the chest and front of the shoulder open. 20 sec each side.'
+  chestdoor:'Forearm on a doorframe, elbow at shoulder height. Step through gently until the chest and front of the shoulder open. 20 sec each side.',
+  /* sciatica routine */
+  rocking:'Lie on your back, hug both knees to your chest and rock gently side to side, massaging the lower back against the floor. Small, lazy movements.',
+  lyingtwist:'Lie on your back, arms out in a T. Drop both bent knees to one side, head turning the other way. Shoulders stay heavy on the floor. Let gravity hold it — no forcing the knees down.',
+  glides:'Lie on your back, hands behind one thigh, hip and knee at 90°. Slowly straighten the knee toward the ceiling until a gentle pull, then bend it back. Keep moving — this is the one exercise where you do NOT hold. 10 smooth, painless glides per side. If anything tingles or shoots, make the movement smaller.',
+  /* back & neck routine */
+  childside:'Kneel, sit back toward the heels, arms walked forward on the floor. Then walk both hands over to the left until the right side of the torso stretches, breathe there, and switch. A cushion under the hips if the knees complain.',
+  needle:'On all fours. Slide the right arm under the left, palm up, until the right shoulder and ear rest toward the floor. The upper back rotates — breathe into the spot between the shoulder blades. Then the other side.',
+  levator:'Sit or stand. Turn your head 45° to the left, then look down toward your left armpit. The left hand can rest gently on the back of the head — weight only, no pulling. This finds the stubborn spot where the right neck meets the shoulder blade. Then the other side.'
 };
 
 /* ============ STEP BUILDERS ============ */
 const T =(name,side,secs,desc,group)=>({kind:'timed',name,side,secs,desc,group});
 const R =(name,label,desc)=>({kind:'reps',name,label,desc,group:name});
 
-/* Morning (~4 min, standing, easy) */
+/* Morning (~5 min, standing, easy) */
 const MORNING = [
   R('Arm circles','10 back + 10 forward',DESC.armcircles),
   T('Overhead reach + side lean',null,30,DESC.reach,'m2'),
   T('Neck tilts + rotations',null,45,DESC.necktilts,'m3'),
   T('Standing forward fold, knees soft',null,60,DESC.standfold,'m4'),
-  T('Shoulder opener: up → T → behind',null,45,DESC.shoulderlite,'m5'),
+  T('Shoulder stretch: cross-body + overhead',null,60,DESC.crossbody,'m5'),
+  T('Single-leg balance','30 sec per side',60,DESC.balance,'m6'),
 ];
 
 /* Breaks: 2 fixed + rotating pool */
 const BREAK_FIXED = [
-  {name:'Shoulder sequence: up → T → behind back',secs:60,desc:DESC.physioseq},
+  {name:'Eagle arms',secs:45,desc:DESC.eagle},
   {name:'Shoulder blade squeezes',secs:45,desc:DESC.blades},
 ];
 const BREAK_POOL = [
   {name:'Right-side neck stretch',secs:45,desc:DESC.neckR},
-  {name:'Single-leg balance',secs:60,desc:DESC.balance},
-  {name:'Standing hip flexor stretch',secs:45,desc:DESC.hipdoor},
+  {name:'Standing hip flexor stretch',secs:45,desc:DESC.hipstand},
   {name:'Gentle spinal twist',secs:45,desc:DESC.twist},
   {name:'Trapezius stretch',secs:45,desc:DESC.trap},
   {name:'Doorframe chest opener',secs:45,desc:DESC.chestdoor},
 ];
 
 /* Stretch routines */
-const WARMUP = [
-  R('Cat-Cow','10–15 fluid reps',DESC.catcow),
-  R('Bird-Dog','8–10 each side',DESC.birddog),
-];
-const CORE = [
-  T('Hamstring stretch, strap','Right · round 1',90,DESC.ham,'ham'),
-  T('Hamstring stretch, strap','Left · round 1',90,DESC.ham,'ham'),
-  T('Hamstring stretch, strap','Right · round 2',90,DESC.ham,'ham'),
-  T('Hamstring stretch, strap','Left · round 2',90,DESC.ham,'ham'),
-  T('Seated forward fold',null,120,DESC.fold,'fold'),
-];
-const HIPFLEX =(s)=>[
-  T('Supine hip flexor (bed edge)','Right',s,DESC.hipflex,'hf'),
-  T('Supine hip flexor (bed edge)','Left',s,DESC.hipflex,'hf'),
-];
-const FIG4 = [
-  T('Figure-four at wall','Right',120,DESC.fig4,'f4'),
-  T('Figure-four at wall','Left',90,DESC.fig4,'f4'),
-  T('Figure-four at wall','Right again',60,DESC.fig4,'f4'),
-];
-const SIDEBEND = [
-  T('Seated side bend (QL)','Lean left — stretch right',60,DESC.sidebend,'sb'),
-  T('Seated side bend (QL)','Lean right — stretch left',60,DESC.sidebend,'sb'),
-];
-const OPENBOOK = [ R('Open-book rotations','8–10 each side',DESC.openbook) ];
-const TILTS = [ R('Pelvic tilts','10–15 slow reps',DESC.tilts) ];
-const CALVES = [
-  T('Calf stretch — straight knee','Right',60,DESC.calfA,'cA'),
-  T('Calf stretch — straight knee','Left',60,DESC.calfA,'cA'),
-  T('Calf stretch — bent knee','Right',60,DESC.calfB,'cB'),
-  T('Calf stretch — bent knee','Left',60,DESC.calfB,'cB'),
-];
-
 const ROUTINES = [
   {id:'mini',name:'Mini session',mini:true,desc:'For 1 am nights, low days, sick days. Something beats nothing — always.',
    steps:[
@@ -241,14 +213,56 @@ const ROUTINES = [
      T('Seated forward fold',null,90,DESC.fold,'fold'),
      T('Figure-four at wall','Right',90,DESC.fig4,'f4'),
    ]},
-  {id:'r1',name:'Glute / lower back flare',desc:'Hip flexor, figure-four and pelvic tilts weighted toward the right side.',
-   steps:[...WARMUP,...CORE,...HIPFLEX(75),...FIG4,...TILTS]},
-  {id:'r2',name:'Mid-back flare',desc:'QL side bends and open-book rotations for the spot below the bra strap.',
-   steps:[...WARMUP,...CORE,...SIDEBEND,...OPENBOOK]},
-  {id:'r3',name:'Both areas',desc:'The fuller flare routine — hips, glutes and mid-back.',
-   steps:[...WARMUP,...CORE,...HIPFLEX(60),...FIG4,...SIDEBEND,...TILTS]},
-  {id:'r4',name:'Normal routine',desc:'No issues today — full maintenance including calves.',
-   steps:[...WARMUP,...CORE,...HIPFLEX(75),...CALVES,...FIG4,...TILTS]},
+  {id:'sciatica',name:'Sciatica & glute relief',desc:'For the right glute / lower back. Gentle on hamstrings on purpose — nerves want calm, not aggressive stretching.',
+   steps:[
+     R('Cat-Cow','10–15 fluid reps',DESC.catcow),
+     T('Knees-to-chest rocking',null,60,DESC.rocking,'rock'),
+     T('Figure-four at wall','Right',120,DESC.fig4,'f4'),
+     T('Figure-four at wall','Left',90,DESC.fig4,'f4'),
+     T('Figure-four at wall','Right again',60,DESC.fig4,'f4'),
+     T('Lying spinal twist','Knees to the left',60,DESC.lyingtwist,'lt'),
+     T('Lying spinal twist','Knees to the right',60,DESC.lyingtwist,'lt'),
+     R('Sciatic nerve glides','10 smooth glides per side',DESC.glides),
+     T('Standing hip flexor','Right · back knee straight',90,DESC.hipstand,'hf'),
+     T('Standing hip flexor','Left · back knee straight',90,DESC.hipstand,'hf'),
+   ]},
+  {id:'backneck',name:'Back & neck',desc:'Mid-back, upper back and the right-side neck. No hamstring block — add it yourself if you feel like it.',
+   steps:[
+     R('Cat-Cow','10–15 fluid reps',DESC.catcow),
+     T('Child\u2019s pose with side reach','Hands walk left — stretch right',45,DESC.childside,'cp'),
+     T('Child\u2019s pose with side reach','Hands walk right — stretch left',45,DESC.childside,'cp'),
+     T('Thread the needle','Right arm under',45,DESC.needle,'tn'),
+     T('Thread the needle','Left arm under',45,DESC.needle,'tn'),
+     R('Open-book rotations','8–10 each side',DESC.openbook),
+     T('Seated side bend (QL)','Lean left — stretch right',60,DESC.sidebend,'sb'),
+     T('Seated side bend (QL)','Lean right — stretch left',60,DESC.sidebend,'sb'),
+     T('Lying spinal twist','Knees to the left',60,DESC.lyingtwist,'lt'),
+     T('Lying spinal twist','Knees to the right',60,DESC.lyingtwist,'lt'),
+     T('Neck tilts + rotations',null,45,DESC.necktilts,'nt'),
+     T('Levator scapulae stretch','Right side',30,DESC.levator,'lev'),
+     T('Levator scapulae stretch','Left side',30,DESC.levator,'lev'),
+   ]},
+  {id:'r4',name:'Normal routine',desc:'The full maintenance session — floor work in one block, then standing.',
+   steps:[
+     R('Cat-Cow','10–15 fluid reps',DESC.catcow),
+     T('Hamstring stretch, strap','Right · round 1',90,DESC.ham,'ham'),
+     T('Hamstring stretch, strap','Left · round 1',90,DESC.ham,'ham'),
+     T('Hamstring stretch, strap','Right · round 2',90,DESC.ham,'ham'),
+     T('Hamstring stretch, strap','Left · round 2',90,DESC.ham,'ham'),
+     T('Seated forward fold',null,120,DESC.fold,'fold'),
+     T('Butterfly stretch',null,75,DESC.butterfly,'bf'),
+     T('Figure-four at wall','Right · 2 min',120,DESC.fig4,'f4'),
+     T('Figure-four at wall','Left · 2 min',120,DESC.fig4,'f4'),
+     T('Figure-four at wall','Right · 1 min',60,DESC.fig4,'f4'),
+     T('Figure-four at wall','Left · 1 min',60,DESC.fig4,'f4'),
+     R('Pelvic tilts','10–15 slow reps',DESC.tilts),
+     T('Standing hip flexor','Right · back knee straight',90,DESC.hipstand,'hf'),
+     T('Standing hip flexor','Left · back knee straight',90,DESC.hipstand,'hf'),
+     T('Calf stretch — straight knee','Right',60,DESC.calfA,'cA'),
+     T('Calf stretch — straight knee','Left',60,DESC.calfA,'cA'),
+     T('Calf stretch — bent knee','Right',60,DESC.calfB,'cB'),
+     T('Calf stretch — bent knee','Left',60,DESC.calfB,'cB'),
+   ]},
 ];
 
 function estMinutes(steps){
@@ -267,8 +281,8 @@ function daySeed(){
 function tipOfDay(){ return TIPS[ daySeed() % TIPS.length ]; }
 function rotatingBreak(){ return BREAK_POOL[ daySeed() % BREAK_POOL.length ]; }
 
-/* ============ TODAY-ONLY STATE (localStorage, per date) ============ */
-const LSKEY='longsit_today_v2';
+/* ============ TODAY-ONLY STATE ============ */
+const LSKEY='longsit_today_v3';
 let today = null;
 
 function loadToday(){
@@ -277,10 +291,14 @@ function loadToday(){
     const raw=localStorage.getItem(LSKEY);
     if(raw){
       const s=JSON.parse(raw);
-      if(s.date===t){ today=s; return; }
+      if(s.date===t && Array.isArray(s.morning) && s.morning.length===MORNING.length
+         && Array.isArray(s.breaks) && s.breaks.length===3){
+        if(!Array.isArray(s.sessions)) s.sessions=[];
+        today=s; return;
+      }
     }
   }catch(e){}
-  today={date:t,morning:MORNING.map(()=>false),breaks:[false,false,false]};
+  today={date:t,morning:MORNING.map(()=>false),breaks:[false,false,false],sessions:[]};
   saveToday();
 }
 function saveToday(){
@@ -292,7 +310,6 @@ function buzz(){
   try{
     if(navigator.vibrate){ navigator.vibrate(200); }
     else{
-      // iOS Safari haptic attempt via switch toggle
       const lbl=document.getElementById('hapticLabel');
       if(lbl) lbl.click();
     }
@@ -305,7 +322,7 @@ function buzz(){
 const app=document.getElementById('app');
 let view={name:'home'};
 let guided=null;
-let timers={};   // key -> {remaining, interval}
+let timers={};
 
 function fmt(s){ const m=Math.floor(s/60),ss=s%60; return m>0? m+':'+String(ss).padStart(2,'0') : ss+'s'; }
 
@@ -315,8 +332,7 @@ function render(){
   else if(view.name==='done') renderDone();
 }
 
-/* ---- generic step row (used by morning, breaks) ---- */
-function stepRow(key,idx,step,checked,openKey){
+function stepRow(key,idx,step,checked){
   const tk=key+idx;
   const running=timers[tk];
   const isOpen = view.open===tk;
@@ -358,12 +374,16 @@ function renderHome(){
   const breaksDone = today.breaks.every(x=>x);
   const breaksHtml = breakSteps.map((s,i)=>stepRow('b',i,s,today.breaks[i])).join('');
 
-  const routinesHtml = ROUTINES.map(r=>`
-    <button class="rbtn ${r.mini?'mini':''}" onclick="startRoutine('${r.id}')">
+  const sessionDone = today.sessions.length>0;
+  const routinesHtml = ROUTINES.map(r=>{
+    const done=today.sessions.includes(r.id);
+    return `
+    <button class="rbtn ${r.mini?'mini':''} ${done?'completed':''}" onclick="startRoutine('${r.id}')">
+      ${done?'<span class="rdone">done ✓</span>':''}
       <div class="rn">${r.name}</div>
       <div class="rd">${r.desc}</div>
       <div class="rt">~${estMinutes(r.steps)} min · ${r.steps.length} steps</div>
-    </button>`).join('');
+    </button>`;}).join('');
 
   app.innerHTML=`
   <header>
@@ -372,15 +392,15 @@ function renderHome(){
     <div class="datebar">${dateline}</div>
   </header>
 
+  <div class="card">
+    <h2>Morning · ~5 min ${morningDone?'<span class="alldone">done ✓</span>':''}</h2>
+    <div class="sub">Standing, straight out of bed. Tap a timer or just tick things off.</div>
+    ${morningHtml}
+  </div>
+
   <div class="tipcard">
     <div class="tiplabel">Today's focus</div>
     <div class="tiptext">${tipOfDay()}</div>
-  </div>
-
-  <div class="card">
-    <h2>Morning · ~4 min ${morningDone?'<span class="alldone">done ✓</span>':''}</h2>
-    <div class="sub">Standing, straight out of bed. Tap a timer or just tick things off.</div>
-    ${morningHtml}
   </div>
 
   <div class="card">
@@ -390,13 +410,12 @@ function renderHome(){
   </div>
 
   <div class="card">
-    <h2>Stretch session</h2>
+    <h2>Stretch session ${sessionDone?'<span class="alldone">done ✓</span>':''}</h2>
     <div class="sub">Pick what matches today's body — including the tiny one.</div>
     ${routinesHtml}
   </div>`;
 }
 
-/* ---- row actions ---- */
 window.toggleOpen=k=>{ view.open=(view.open===k?null:k); render(); };
 
 window.rowCheck=(key,idx)=>{
@@ -433,7 +452,6 @@ window.rowTimer=(key,idx,secs)=>{
   render();
 };
 
-/* ---- stretch sessions ---- */
 window.startRoutine=id=>{
   stopAllTimers();
   const r=ROUTINES.find(x=>x.id===id);
@@ -493,7 +511,6 @@ window.setMode=m=>{
   else { if(guided&&guided.interval) clearInterval(guided.interval); guided=null; render(); }
 };
 
-/* ---- guided ---- */
 function buildTimeline(steps){
   const tl=[];
   steps.forEach((s,i)=>{
@@ -607,8 +624,11 @@ function updateGuidedTime(){
   }
 }
 
-/* ---- completion ---- */
-window.finishSession=()=>{ stopAllTimers(); view={name:'done'}; render(); };
+window.finishSession=()=>{
+  stopAllTimers();
+  if(view.routine && !today.sessions.includes(view.routine.id)){ today.sessions.push(view.routine.id); saveToday(); }
+  view={name:'done'}; render();
+};
 window.exitSession=()=>{ stopAllTimers(); if(guided&&guided.interval) clearInterval(guided.interval); guided=null; view={name:'home'}; render(); };
 window.goHome=()=>{ view={name:'home'}; render(); };
 
@@ -617,7 +637,7 @@ function renderDone(){
   <div class="card celebrate" style="margin-top:60px">
     <div class="big">✓</div>
     <h2>Session done</h2>
-    <p>Your hamstrings are a little longer than they were 25 minutes ago.</p>
+    <p>A little longer and looser than when you started.</p>
     <button class="bigbtn primary" onclick="goHome()">Back to today</button>
   </div>`;
 }
@@ -625,7 +645,6 @@ function renderDone(){
 /* ============ INIT ============ */
 loadToday();
 render();
-/* refresh daily content if the app stays open past midnight */
 setInterval(()=>{ if(today.date!==todayStr()){ loadToday(); if(view.name==='home') render(); } },60000);
 </script>
 </body>
